@@ -8,4 +8,8 @@ import lombok.Data;
 @Data
 public class Table extends AContent {
     private List<TableRow> objects = new ArrayList<>();
+
+    public void addRow(TableRow row) {
+        objects.add(row);
+    }
 }

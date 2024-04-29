@@ -5,23 +5,25 @@ import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 import de.woody64k.services.word.model.ContentTable;
+import de.woody64k.services.word.model.ContentTable.TABLE_TYPE;
 import de.woody64k.services.word.model.ContentTableRow;
 
 public class FlatTableParser {
 
     public static ContentTable parseTable(XWPFTable table) {
-        ContentTable tableContent = new ContentTable();
+        ContentTable contentTable = new ContentTable();
+        contentTable.setType(TABLE_TYPE.FLAT);
         for (XWPFTableRow row : table.getRows()) {
-            tableContent.addRow(parseRow(row));
+            contentTable.addRow(parseRow(row));
         }
-        return tableContent;
+        return contentTable;
     }
 
     public static ContentTableRow parseRow(XWPFTableRow row) {
-        ContentTableRow rowContent = new ContentTableRow();
+        ContentTableRow contentRow = new ContentTableRow();
         for (XWPFTableCell cell : row.getTableCells()) {
-            rowContent.add(cell.getText());
+            contentRow.add(cell.getText());
         }
-        return rowContent;
+        return contentRow;
     }
 }

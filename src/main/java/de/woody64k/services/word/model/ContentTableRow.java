@@ -7,13 +7,13 @@ import lombok.Data;
 
 @Data
 public class ContentTableRow {
-    List<String> values = new ArrayList<>();
+    List<String> cells = new ArrayList<>();
 
     public void add(String value) {
-        values.add(value);
+        cells.add(value);
     }
 
     public String get(int index) {
-        return values.get(index);
+        return cells.get(index);
     }
 }

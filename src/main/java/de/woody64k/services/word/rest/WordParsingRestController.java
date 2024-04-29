@@ -1,6 +1,7 @@
 package de.woody64k.services.word.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +18,7 @@ public class WordParsingRestController {
     @Autowired
     private WordParser parser;
 
-    @PostMapping("/parser")
+    @PostMapping(value = "/parser", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public WordContent handleFileUpload(@RequestParam("file") MultipartFile uploadFile) {
         try {
             return parser.parseConent(uploadFile);

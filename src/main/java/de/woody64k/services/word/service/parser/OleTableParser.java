@@ -18,6 +18,7 @@ import org.apache.xmlbeans.XmlObject;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTR;
 
 import de.woody64k.services.word.model.ContentTable;
+import de.woody64k.services.word.model.ContentTable.TABLE_TYPE;
 import de.woody64k.services.word.model.ContentTableRow;
 
 /**
@@ -84,10 +85,11 @@ public class OleTableParser {
         List<ContentTable> tables = new ArrayList<>();
         for (Sheet sheet : workbook) {
             ContentTable contentTable = new ContentTable();
+            contentTable.setType(TABLE_TYPE.OLE);
             for (Row row : sheet) {
                 ContentTableRow contentRow = contentTable.newRow();
                 for (Cell cell : row) {
-                    contentRow.add(cell.getStringCellValue());
+                    contentRow.add(cell.toString());
                 }
             }
             tables.add(contentTable);

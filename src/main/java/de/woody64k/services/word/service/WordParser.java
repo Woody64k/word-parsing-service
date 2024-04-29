@@ -26,11 +26,11 @@ public class WordParser {
                 docContent.addTable(FlatTableParser.parseTable(table));
             }
             for (XWPFParagraph paragraph : doc.getParagraphs()) {
+                log.info(paragraph.getParagraphText());
                 for (XWPFRun run : paragraph.getRuns()) {
                     docContent.addTables(OleTableParser.parseOLEObjects(run));
                 }
             }
-            XWPFRun run;
             return docContent;
         } catch (IOException e) {
             log.error("Error while parse Document.", e);

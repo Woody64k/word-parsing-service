@@ -7,15 +7,20 @@ import lombok.Data;
 
 @Data
 public class ContentTable extends AContent {
-    private List<ContentTableRow> objects = new ArrayList<>();
+    private TABLE_TYPE type;
+    private List<ContentTableRow> rows = new ArrayList<>();
 
     public ContentTableRow newRow() {
         ContentTableRow row = new ContentTableRow();
-        objects.add(row);
+        rows.add(row);
         return row;
     }
 
     public void addRow(ContentTableRow row) {
-        objects.add(row);
+        rows.add(row);
+    }
+
+    public enum TABLE_TYPE {
+        FLAT, OLE
     }
 }

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
 
-import de.woody64k.services.word.model.WordContent;
+import de.woody64k.services.word.model.content.WordContent;
 
 class WordParserTest {
     private static File file;

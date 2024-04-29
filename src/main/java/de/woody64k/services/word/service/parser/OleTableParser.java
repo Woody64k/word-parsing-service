@@ -17,9 +17,9 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.xmlbeans.XmlObject;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTR;
 
-import de.woody64k.services.word.model.ContentTable;
-import de.woody64k.services.word.model.ContentTable.TABLE_TYPE;
-import de.woody64k.services.word.model.ContentTableRow;
+import de.woody64k.services.word.model.content.ContentTable;
+import de.woody64k.services.word.model.content.ContentTableRow;
+import de.woody64k.services.word.model.content.ContentTable.TABLE_TYPE;
 
 /**
  * Parser to handle OLE Embedded Tables.

@@ -4,9 +4,9 @@ import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
-import de.woody64k.services.word.model.ContentTable;
-import de.woody64k.services.word.model.ContentTable.TABLE_TYPE;
-import de.woody64k.services.word.model.ContentTableRow;
+import de.woody64k.services.word.model.content.ContentTable;
+import de.woody64k.services.word.model.content.ContentTableRow;
+import de.woody64k.services.word.model.content.ContentTable.TABLE_TYPE;
 
 public class FlatTableParser {
 

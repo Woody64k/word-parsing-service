@@ -1,4 +1,4 @@
-package de.woody64k.services.word.model;
+package de.woody64k.services.word.model.content;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

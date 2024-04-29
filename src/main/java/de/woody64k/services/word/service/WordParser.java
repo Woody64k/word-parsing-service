@@ -10,7 +10,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import de.woody64k.services.word.model.WordContent;
+import de.woody64k.services.word.model.content.WordContent;
 import de.woody64k.services.word.service.parser.FlatTableParser;
 import de.woody64k.services.word.service.parser.OleTableParser;
 import lombok.extern.slf4j.Slf4j;

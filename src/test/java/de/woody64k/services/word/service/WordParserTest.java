@@ -29,7 +29,7 @@ class WordParserTest {
 
             WordParser parser = new WordParser();
             WordContent content = parser.parseConent(testFile);
-            assertTrue(content.getTables().size() == 1, "Number of found Tables is wrong.");
+            assertTrue(content.getTables().size() == 2, "Number of found Tables is wrong.");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

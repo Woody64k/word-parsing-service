@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class TableRow {
+public class ContentTableRow {
     List<String> values = new ArrayList<>();
 
     public void add(String value) {

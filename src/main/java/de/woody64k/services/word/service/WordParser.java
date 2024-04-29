@@ -21,8 +21,7 @@ public class WordParser {
 
     public WordContent parseConent(MultipartFile uploadFile) {
         WordContent docContent = new WordContent();
-        try {
-            XWPFDocument doc = new XWPFDocument(new ByteArrayInputStream(uploadFile.getBytes()));
+        try (XWPFDocument doc = new XWPFDocument(new ByteArrayInputStream(uploadFile.getBytes()))) {
             for (XWPFTable table : doc.getTables()) {
                 docContent.addTable(FlatTableParser.parseTable(table));
             }

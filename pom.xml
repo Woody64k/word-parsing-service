@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>de.woody64k.services</groupId>
 	<artifactId>word-parsing-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>word-parsing-service</name>
 	<description>A Rest Service which parses Information out of a Word Document.</description>
 	<properties>

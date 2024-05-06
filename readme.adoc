@@ -2,7 +2,7 @@
 
 == Setup
 
-In Dev Profile the URL to call swagger-ui is: http://localhost:8080/swagger-ui.html
+URL to call swagger-ui is: http://localhost:8080/swagger-ui.html
 
 == Requierements
 

@@ -1,17 +1,27 @@
 package de.woody64k.services.word.model.value.response;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
 public class WordValues {
-    GenericValue data = new GenericValue();
+    GenericObject data = new GenericObject();
 
     public void addValue(String key, String value) {
         data.put(key, value);
     }
 
-    public void integrate(String key, WordValues values) {
-        data.put(key, values.getData());
+    public void integrate(WordValues values) {
+        data.putAll(values.getData());
+    }
+
+    public void integrate(GenericObject values) {
+        data.putAll(values);
+    }
+
+    public void addValues(String key, List<GenericObject> values) {
+        data.put(key, values);
     }
 
     /**
@@ -20,7 +30,7 @@ public class WordValues {
      * @param key
      * @return
      */
-    public GenericValue getList(String key) {
+    public GenericObject getList(String key) {
         return data.getList(key);
     }
 

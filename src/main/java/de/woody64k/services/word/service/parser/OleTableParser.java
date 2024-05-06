@@ -18,8 +18,8 @@ import org.apache.xmlbeans.XmlObject;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTR;
 
 import de.woody64k.services.word.model.content.ContentTable;
-import de.woody64k.services.word.model.content.ContentTableRow;
 import de.woody64k.services.word.model.content.ContentTable.TABLE_TYPE;
+import de.woody64k.services.word.model.content.ContentTableRow;
 
 /**
  * Parser to handle OLE Embedded Tables.
@@ -87,12 +87,24 @@ public class OleTableParser {
             ContentTable contentTable = new ContentTable();
             contentTable.setType(TABLE_TYPE.OLE);
             for (Row row : sheet) {
-                ContentTableRow contentRow = contentTable.newRow();
+                ContentTableRow contentRow = new ContentTableRow();
                 for (Cell cell : row) {
-                    contentRow.add(cell.toString());
+                    contentRow.add(cell.toString().trim());
+                    if (!cell.toString().isBlank()) {
+                        // @implements FR-05
+                        contentRow.setFilled(true);
+                    }
+                }
+                if (contentRow.isFilled()) {
+                    // @implements FR-05
+                    contentTable.add(contentRow);
+                    contentTable.setFilled(true);
                 }
             }
-            tables.add(contentTable);
+            if (contentTable.isFilled()) {
+                // @implements FR-05
+                tables.add(contentTable);
+            }
         }
         return tables;
     }

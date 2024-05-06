@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import de.woody64k.services.word.model.content.WordContent;
-import de.woody64k.services.word.model.value.DocumentValueRequirement;
+import de.woody64k.services.word.model.value.request.DocumentValueRequirement;
 import de.woody64k.services.word.model.value.response.WordValues;
 import de.woody64k.services.word.service.WordAnalyser;
 import de.woody64k.services.word.service.WordParser;

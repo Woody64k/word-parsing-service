@@ -1,11 +1,17 @@
 package de.woody64k.services.word.service;
 
+import java.util.Set;
+
 import org.springframework.stereotype.Service;
 
 import de.woody64k.services.word.model.content.WordContent;
-import de.woody64k.services.word.model.value.DocumentValueRequirement;
-import de.woody64k.services.word.model.value.ListRequirement;
+import de.woody64k.services.word.model.value.request.DocumentValueRequirement;
+import de.woody64k.services.word.model.value.request.ListRequirement;
+import de.woody64k.services.word.model.value.request.SearchRequirement;
 import de.woody64k.services.word.model.value.response.WordValues;
+import de.woody64k.services.word.service.analyser.DouplepointValueAnalyser;
+import de.woody64k.services.word.service.analyser.HeadingRowAnalyser;
+import de.woody64k.services.word.service.analyser.HeadingColumnAnalyser;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -14,12 +20,18 @@ public class WordAnalyser {
 
     public WordValues getValues(WordContent parsedData, DocumentValueRequirement request) {
         WordValues result = new WordValues();
-        for (String value : request.getValues()) {
-            // TODO: Collect Values.
-            result.addValue(value, null);
-        }
+        result.integrate(parseFlatValues(parsedData, request.getValues()));
         for (ListRequirement listRequ : request.getLists()) {
-            result.integrate(listRequ.getName(), getValues(parsedData, listRequ));
+            result.addValues(listRequ.getName(), HeadingRowAnalyser.analyse(parsedData, listRequ));
+        }
+        return result;
+    }
+
+    private WordValues parseFlatValues(WordContent parsedData, Set<SearchRequirement> set) {
+        WordValues result = new WordValues();
+        for (SearchRequirement condition : set) {
+            result.integrate(HeadingColumnAnalyser.analyse(parsedData, condition));
+            result.integrate(DouplepointValueAnalyser.analyse(parsedData, condition));
         }
         return result;
     }

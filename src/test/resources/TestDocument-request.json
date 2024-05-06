@@ -1,0 +1,51 @@
+{
+	"values": [
+		{
+			"searchTerm": "Name",
+			"resultName": "gericht"
+		},
+		{
+			"searchTerm": "Energie in kcal.",
+			"resultName": "kalorien"
+		},
+		{
+			"searchTerm": "Dauer",
+			"resultName": "dauer"
+		},
+		{
+			"searchTerm": "Geschmack",
+			"resultName": "geschmack"	
+		},
+		{
+			"searchTerm": "Koch",
+			"resultName": "koch"
+		},
+		{
+			"searchTerm": "Redaktion",
+			"resultName": "redaktion"
+		},
+		{
+			"searchTerm": "Fotos",
+			"resultName": "fotos"
+		}
+	],
+	"lists": [
+		{
+			"values": [
+				{
+					"searchTerm": "Namen",
+					"resultName": "name"
+				},
+				{
+					"searchTerm": "Spezies",
+					"resultName": "art"
+				},
+				{
+					"searchTerm": "Gewicht",
+					"resultName": "gewicht"
+				}
+			],
+			"name": "haustiere"
+		}
+	]
+}

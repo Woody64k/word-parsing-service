@@ -1,0 +1,67 @@
+= Word Parser Service
+
+== Setup
+
+In Dev Profile the URL to call swagger-ui is: http://localhost:8080/swagger-ui.html
+
+== Requierements
+
+=== Business Requirements
+
+.Business Requirements
+[%header, cols="1,2,4a"]
+|===
+| ID    | name | desciption
+
+| BR-01 [[BR-01]] 
+| Values from vertical tables 
+| Parse the values of a table in a word-document which is structured in vertical tables. (Tables with heading column)
+
+| BR-02 [[BR-02]] 
+| Values from horizontal tables 
+| Parse list values from a Horizontal Table. (Table with heading row)
+
+| BR-03 [[BR-03]] 
+| Values separated by double-points ':' in text. 
+| Identify values mentioned in text in the format 'fieldname':'value'<newline>
+|===
+
+=== Functional Requirements
+
+[%header, cols="1,1a,2,4a"]
+|===
+| ID    | addressed BR | name                 | desciption
+| FR-01 [[FR-01]]
+| * <<BR-01,BR-01>>       
+| Vertical Tables - Matching
+| To Parse vertical tables, service must read the first column which should exactly match the searchTerm.
+
+| FR-02 [[FR-02]]
+| * <<BR-01,BR-01>>       
+| Vertial Tables - multiple columns
+| While paring vertical Tables, service must collect all columns in the row after the first column (heading) as values (list)
+
+| FR-03 [[FR-03]]
+| * <<BR-01,BR-01>>       
+| Vertial Tables - merge cells
+| While paring vertical Tables: If the next row has an empty heading column, we expect this to be a merged heading and read the values as well.
+
+| FR-04 [[FR-04]]
+| * <<BR-01,BR-01>> 
+ * <<BR-02,BR-02>>
+ * <<BR-03,BR-03>>       
+| General - avoid single value arrays
+| If in sum we just get one value, we transform it to a single string insted of a list.
+
+| FR-05 [[FR-05]]
+| * <<BR-01,BR-01>> 
+ * <<BR-02,BR-02>>
+ * <<BR-03,BR-03>>       
+| General - avoid collecting empty
+| In general we don't want to parse Empty Rows and Tables.
+
+| FR-06 [[FR-06]]
+| * <<BR-02,BR-02>>      
+| Horizontal Tables - Matching
+| If a Horizonal Table contains all Headings defined in the search criteria, the values of the columns will be parsed into multiple objects.
+|===

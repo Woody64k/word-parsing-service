@@ -10,6 +10,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import de.woody64k.services.word.model.content.ContentTable;
 import de.woody64k.services.word.model.content.WordContent;
 import de.woody64k.services.word.service.parser.FlatTableParser;
 import de.woody64k.services.word.service.parser.OleTableParser;
@@ -23,10 +24,12 @@ public class WordParser {
         WordContent docContent = new WordContent();
         try (XWPFDocument doc = new XWPFDocument(new ByteArrayInputStream(uploadFile.getBytes()))) {
             for (XWPFTable table : doc.getTables()) {
-                docContent.addTable(FlatTableParser.parseTable(table));
+                ContentTable contentTable = FlatTableParser.parseTable(table);
+                if (contentTable.isFilled()) {
+                    docContent.addTable(contentTable);
+                }
             }
             for (XWPFParagraph paragraph : doc.getParagraphs()) {
-                log.info(paragraph.getParagraphText());
                 for (XWPFRun run : paragraph.getRuns()) {
                     docContent.addTables(OleTableParser.parseOLEObjects(run));
                 }

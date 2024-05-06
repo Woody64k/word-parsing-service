@@ -1,23 +1,22 @@
 package de.woody64k.services.word.model.content;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class ContentTable extends AContent {
+public class ContentTable extends ArrayList<ContentTableRow> {
     private TABLE_TYPE type;
-    private List<ContentTableRow> rows = new ArrayList<>();
+    boolean filled = false;
 
     public ContentTableRow newRow() {
         ContentTableRow row = new ContentTableRow();
-        rows.add(row);
+        add(row);
         return row;
     }
 
     public void addRow(ContentTableRow row) {
-        rows.add(row);
+        add(row);
     }
 
     public enum TABLE_TYPE {

@@ -45,6 +45,31 @@
 					"resultName": "autor"
 				}
 			]
+		},
+		{
+			"searchTerm": "Zeiten",
+			"resultName": "zeiten",
+			"transform": {
+				"split": {
+					"by": "/",
+					"as": "list"
+				}
+			}
+		},
+		{
+			"searchTerm": "Kategorie",
+			"resultName": "kategorie",
+			"transform": {
+				"split": {
+					"by": ",",
+					"as": "values",
+					"values": {
+						"1": "topLevel",
+						"2": "MidLevel",
+						"3": "lowLevel"
+					}
+				}
+			}
 		}
 	],
 	"lists": [
@@ -61,6 +86,21 @@
 				{
 					"searchTerm": "Gewicht",
 					"resultName": "gewicht"
+				},
+				{
+					"searchTerm": "Maße",
+					"resultName": "abmessung",
+					"transform": {
+						"split": {
+							"by": ",",
+							"as": "values",
+							"values": {
+								"1": "laenge",
+								"2": "breite",
+								"3": "hoehe"
+							}
+						}
+					}
 				}
 			],
 			"name": "haustiere"

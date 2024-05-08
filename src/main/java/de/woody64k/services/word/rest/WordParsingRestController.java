@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import de.woody64k.services.word.model.content.WordContent;
 import de.woody64k.services.word.model.value.request.DocumentValueRequirement;
+import de.woody64k.services.word.model.value.request.validate.RequestValidator;
 import de.woody64k.services.word.model.value.response.WordValues;
 import de.woody64k.services.word.service.WordAnalyser;
 import de.woody64k.services.word.service.WordParser;
@@ -41,6 +42,7 @@ public class WordParsingRestController {
     @RequestBody(content = @Content(encoding = @Encoding(name = "request", contentType = "application/json")))
     public WordValues parseValuesFromWord(@RequestPart DocumentValueRequirement request, @RequestPart("file") MultipartFile uploadFile) {
         try {
+            RequestValidator.validate(request);
             WordContent parsedData = parseWordContent(uploadFile);
             return analyser.getValues(parsedData, request);
         } catch (Exception e) {

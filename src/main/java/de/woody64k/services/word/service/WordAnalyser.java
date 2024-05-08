@@ -1,7 +1,6 @@
 package de.woody64k.services.word.service;
 
 import java.util.Collection;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -29,7 +28,7 @@ public class WordAnalyser {
         return result;
     }
 
-    private WordValues parseFlatValues(WordContent parsedData, Set<SearchRequirement> searchRequ) {
+    private WordValues parseFlatValues(WordContent parsedData, Collection<SearchRequirement> searchRequ) {
         WordValues result = new WordValues();
         for (SearchRequirement condition : searchRequ) {
             result.integrate(HeadingColumnAnalyser.analyse(parsedData, condition));
@@ -57,7 +56,7 @@ public class WordAnalyser {
         }
     }
 
-    private GenericObject scannSubdata(String foundData, Set<SearchRequirement> searchRequ) {
+    private GenericObject scannSubdata(String foundData, Collection<SearchRequirement> searchRequ) {
         GenericObject response = new GenericObject();
         for (SearchRequirement condition : searchRequ) {
             response.putAll(DouplepointValueAnalyser.scanCell(foundData, condition));

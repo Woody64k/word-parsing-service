@@ -8,6 +8,7 @@ import de.woody64k.services.word.model.content.ContentTableRow;
 import de.woody64k.services.word.model.content.WordContent;
 import de.woody64k.services.word.model.value.request.SearchRequirement;
 import de.woody64k.services.word.model.value.response.GenericObject;
+import de.woody64k.services.word.service.analyser.transform.Transformer;
 
 /**
  * Parses Tables with a heading column.
@@ -40,7 +41,7 @@ public class HeadingColumnAnalyser {
 
     private static GenericObject scanRow(SearchRequirement searchRequirement, ContentTableRow row) {
         boolean firstColumn = true;
-        List<String> results = new ArrayList<>();
+        List<Object> results = new ArrayList<>();
         for (String cell : row) {
             // first column matches
             if (firstColumn) {
@@ -56,7 +57,7 @@ public class HeadingColumnAnalyser {
                 if (!cell.isBlank()) {
                     // collect values
                     // @implements: FR-02
-                    results.add(cell);
+                    results.add(Transformer.transform(cell, searchRequirement.getTransform()));
                 }
             }
         }

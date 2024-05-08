@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import de.woody64k.services.word.model.content.ContentTable;
 import de.woody64k.services.word.model.content.ContentTableRow;
@@ -12,6 +11,7 @@ import de.woody64k.services.word.model.content.WordContent;
 import de.woody64k.services.word.model.value.request.ListRequirement;
 import de.woody64k.services.word.model.value.request.SearchRequirement;
 import de.woody64k.services.word.model.value.response.GenericObject;
+import de.woody64k.services.word.service.analyser.transform.Transformer;
 
 public class HeadingRowAnalyser {
 
@@ -43,18 +43,19 @@ public class HeadingRowAnalyser {
                 sizeFirstRow = row.size();
             } else {
                 if (row.size() >= sizeFirstRow) {
-                    result.add(readLine(matches, row));
+                    result.add(readLine(matches, row, listRequirement));
                 }
             }
         }
         return result;
     }
 
-    public static GenericObject readLine(Map<String, Integer> matches, ContentTableRow row) {
+    public static GenericObject readLine(Map<String, Integer> matches, ContentTableRow row, ListRequirement listRequirement) {
         GenericObject oneRow = new GenericObject();
         // read Values
-        for (Entry<String, Integer> match : matches.entrySet()) {
-            oneRow.put(match.getKey(), row.get(match.getValue()));
+        for (SearchRequirement valueRequ : listRequirement.getValues()) {
+            Integer matchColumn = matches.get(valueRequ.getResultName());
+            oneRow.put(valueRequ.getResultName(), Transformer.transform(row.get(matchColumn), valueRequ.getTransform()));
         }
         return oneRow;
     }

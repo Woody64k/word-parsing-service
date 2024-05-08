@@ -16,12 +16,20 @@ public class Transformer {
         }
     }
 
+    /**
+     * @implements FR-08, FR-09
+     * @param value
+     * @param requ
+     * @return
+     */
     public static Object doSplit(String value, ValueTransformRequirement requ) {
         if (value != null && requ.getSplit() != null) {
             String[] splittedValue = value.split(requ.getSplit().getBy());
             if (requ.getSplit().getAs() == SplitAs.list) {
+                // @implements: FR-08
                 return Trimmer.trimmAll(splittedValue);
             } else {
+                // @implements: FR-09
                 GenericObject splitResult = new GenericObject();
                 for (Entry<Integer, String> values : requ.getSplit().getValues().entrySet()) {
                     if (values.getKey() <= splittedValue.length) {

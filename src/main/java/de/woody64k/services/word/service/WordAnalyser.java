@@ -33,14 +33,22 @@ public class WordAnalyser {
         for (SearchRequirement condition : searchRequ) {
             result.integrate(HeadingColumnAnalyser.analyse(parsedData, condition));
             result.integrate(DouplepointValueAnalyser.analyse(parsedData, condition));
-            result.integrate(scannForSubvalues(result, condition));
+            result.integrate(scannForSubvalues(result.getData(), condition));
         }
         return result;
     }
 
-    public GenericObject scannForSubvalues(WordValues result, SearchRequirement condition) {
+    /**
+     * Scanns for subvalues only one level.
+     * 
+     * @implements FR-07
+     * @param result
+     * @param condition
+     * @return
+     */
+    public GenericObject scannForSubvalues(GenericObject result, SearchRequirement condition) {
         if (condition.getValues() != null && condition.getValues().size() > 0) {
-            Object foundData = result.getData().get(condition.getResultName());
+            Object foundData = result.get(condition.getResultName());
             if (foundData instanceof Collection) {
                 GenericObject newData = new GenericObject();
                 for (String oneFound : (Collection<String>) foundData) {

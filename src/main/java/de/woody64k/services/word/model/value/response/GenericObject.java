@@ -3,7 +3,6 @@ package de.woody64k.services.word.model.value.response;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,20 +46,24 @@ public class GenericObject extends LinkedHashMap<String, Object> {
                 } else {
                     results.add(existingObject);
                 }
-            } else if (object instanceof List) {
+            } else if (object instanceof Collection) {
                 results.add(existingObject);
-                results.addAll((List) object);
+                results.addAll((Collection) object);
+            } else if (object instanceof GenericObject) {
+                results.add(object);
             } else {
                 results.add(object);
                 log.warn(String.format("Unsolved Collision for %s", key));
             }
-        } else if (existingObject instanceof List) {
+        } else if (existingObject instanceof Collection) {
             if (object instanceof String) {
-                results.addAll((List) existingObject);
+                results.addAll((Collection) existingObject);
                 results.add(object);
-            } else if (object instanceof List) {
-                results.addAll((List) existingObject);
-                results.addAll((List) object);
+            } else if (object instanceof Collection) {
+                results.addAll((Collection) existingObject);
+                results.addAll((Collection) object);
+            } else if (object instanceof GenericObject) {
+                results.add(object);
             } else {
                 results.add(object);
                 log.warn(String.format("Unsolved Collision for %s", key));

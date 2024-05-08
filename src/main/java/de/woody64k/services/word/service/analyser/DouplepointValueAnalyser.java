@@ -26,7 +26,7 @@ public class DouplepointValueAnalyser {
         return result;
     }
 
-    private static GenericObject scanCell(String cell, SearchRequirement searchRequirement) {
+    public static GenericObject scanCell(String cell, SearchRequirement searchRequirement) {
         List<String> result = new ArrayList<>();
         String condition = searchRequirement.getSearchTerm();
         for (String text = cell; text.contains(condition); text = text.substring(text.indexOf(condition) + condition.length())) {

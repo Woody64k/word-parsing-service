@@ -14,7 +14,7 @@
 		},
 		{
 			"searchTerm": "Geschmack",
-			"resultName": "geschmack"	
+			"resultName": "geschmack"
 		},
 		{
 			"searchTerm": "Koch",
@@ -27,6 +27,24 @@
 		{
 			"searchTerm": "Fotos",
 			"resultName": "fotos"
+		},
+		{
+			"searchTerm": "Kochbuch",
+			"resultName": "buch",
+			"values": [
+				{
+					"searchTerm": "Titel",
+					"resultName": "name"
+				},
+				{
+					"searchTerm": "ISBN",
+					"resultName": "number"
+				},
+				{
+					"searchTerm": "Autor",
+					"resultName": "autor"
+				}
+			]
 		}
 	],
 	"lists": [

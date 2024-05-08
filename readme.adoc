@@ -24,6 +24,10 @@ URL to call swagger-ui is: http://localhost:8080/swagger-ui.html
 | BR-03 [[BR-03]] 
 | Values separated by double-points ':' in text. 
 | Identify values mentioned in text in the format 'fieldname':'value'<newline>
+
+| BR-04 [[BR-04]] 
+| Parse Value structures inside of Values
+| As User I want to parse Structured blocks inside a found value.
 |===
 
 === Functional Requirements

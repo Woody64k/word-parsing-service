@@ -29,7 +29,23 @@ public class GenericObject extends LinkedHashMap<String, Object> {
         } else if (value instanceof List && ((List) value).size() == 1) {
             return (GenericObject) ((List) value).get(0);
         } else {
-            throw new RuntimeException("Empty keys are only allowed if the valie is a generic object.");
+            throw new RuntimeException("Empty keys are only allowed if the value is a generic object.");
+        }
+    }
+
+    @Override
+    public Object put(String key, Object object) {
+        if (key != null) {
+            if (containsKey(key)) {
+                return super.put(key, handleCollision(key, flattenSingleLists(object)));
+            } else {
+                return super.put(key, flattenSingleLists(object));
+            }
+        } else if (object instanceof GenericObject) {
+            putAll((GenericObject) object);
+            return object;
+        } else {
+            throw new RuntimeException("Empty keys are only allowed if the value is a list.");
         }
     }
 
@@ -42,6 +58,22 @@ public class GenericObject extends LinkedHashMap<String, Object> {
                 put(key, flattenSingleLists(m.get(key)));
             }
         }
+    }
+
+    /**
+     * Returns an object only containing the listed keys.
+     * 
+     * @param keys
+     * @return
+     */
+    public GenericObject sliceOut(Collection<String> keys) {
+        GenericObject slicedObject = new GenericObject();
+        for (String key : keys) {
+            if (containsKey(key)) {
+                slicedObject.put(key, get(key));
+            }
+        }
+        return slicedObject;
     }
 
     private Object handleCollision(String key, Object object) {
@@ -124,5 +156,14 @@ public class GenericObject extends LinkedHashMap<String, Object> {
             put(key, values);
             return values;
         }
+    }
+
+    public boolean equalsByKey(GenericObject mergedResult, List<String> mergeKey) {
+        for (String key : mergeKey) {
+            if ((containsKey(key) && !get(key).equals(mergedResult.get(key))) || (!containsKey(key) && mergedResult.containsKey(key))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

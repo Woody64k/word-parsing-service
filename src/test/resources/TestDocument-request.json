@@ -120,7 +120,18 @@
 					"resultName": "telephone"
 				}
 			],
-			"name": "telefonnummern"
+			"name": "telefonnummern",
+			"transform": {
+				"merge": {
+					"by": [
+						"name",
+						"familyName"
+					],
+					"collect": [
+						"telephone"
+					]
+				}
+			}
 		}
 	]
 }

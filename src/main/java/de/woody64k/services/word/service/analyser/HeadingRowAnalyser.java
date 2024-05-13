@@ -11,6 +11,7 @@ import de.woody64k.services.word.model.content.WordContent;
 import de.woody64k.services.word.model.value.request.ListRequirement;
 import de.woody64k.services.word.model.value.request.SearchRequirement;
 import de.woody64k.services.word.model.value.response.GenericObject;
+import de.woody64k.services.word.service.analyser.transform.ListTransformer;
 import de.woody64k.services.word.service.analyser.transform.Transformer;
 
 public class HeadingRowAnalyser {
@@ -20,7 +21,7 @@ public class HeadingRowAnalyser {
         for (ContentTable table : parsedData.getTables()) {
             List<GenericObject> foundValues = scannTable(listRequirement, table);
             if (foundValues != null && foundValues.size() > 0) {
-                result.addAll(foundValues);
+                result.addAll(ListTransformer.transform(foundValues, listRequirement.getTransform()));
             }
         }
         return result;

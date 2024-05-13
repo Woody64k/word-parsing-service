@@ -104,6 +104,23 @@
 				}
 			],
 			"name": "haustiere"
+		},
+		{
+			"values": [
+				{
+					"searchTerm": "Vorname",
+					"resultName": "name"
+				},
+				{
+					"searchTerm": "Nachname",
+					"resultName": "familyName"
+				},
+				{
+					"searchTerm": "Telefonnummer",
+					"resultName": "telephone"
+				}
+			],
+			"name": "telefonnummern"
 		}
 	]
 }

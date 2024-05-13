@@ -81,7 +81,7 @@ URL to call swagger-ui is: http://localhost:8080/swagger-ui.html
 | * <<BR-04,BR-04>>   
 * <<BR-03,BR-03>>     
 | Substructures Support
-| We support substructures as ":" match type within table matches.
+| We support substructures as ":" match type within table matches. If no resultName is defined, it will be integrated into the higher level structure.
 
 | FR-08 [[FR-08]]
 | * <<BR-05,BR-05>>      

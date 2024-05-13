@@ -57,7 +57,9 @@ public class HeadingColumnAnalyser {
                 if (!cell.isBlank()) {
                     // collect values
                     // @implements: FR-02
-                    results.add(Transformer.transform(cell, searchRequirement.getTransform()));
+                    Object foundInformation = Transformer.transform(cell, searchRequirement.getTransform());
+                    Object result = SubvalueScanner.scannForSubvalues(foundInformation, searchRequirement);
+                    results.add(result);
                 }
             }
         }

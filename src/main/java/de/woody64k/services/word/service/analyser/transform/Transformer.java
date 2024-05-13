@@ -32,8 +32,8 @@ public class Transformer {
                 // @implements: FR-09
                 GenericObject splitResult = new GenericObject();
                 for (Entry<Integer, String> values : requ.getSplit().getValues().entrySet()) {
-                    if (values.getKey() <= splittedValue.length) {
-                        splitResult.put(values.getValue(), splittedValue[values.getKey() - 1]);
+                    if (values.getKey() <= splittedValue.length && values.getKey() >= 1) {
+                        splitResult.put(values.getValue(), splittedValue[values.getKey() - 1].trim());
                     }
                 }
                 return splitResult;

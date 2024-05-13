@@ -3,6 +3,7 @@ package de.woody64k.services.word.model.value.response;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,9 +20,17 @@ public class GenericObject extends LinkedHashMap<String, Object> {
     private static final long serialVersionUID = 1L;
 
     public static GenericObject create(String key, Object value) {
-        GenericObject val = new GenericObject();
-        val.put(key, value);
-        return val;
+        if (key != null) {
+            GenericObject val = new GenericObject();
+            val.put(key, value);
+            return val;
+        } else if (value instanceof GenericObject) {
+            return (GenericObject) value;
+        } else if (value instanceof List && ((List) value).size() == 1) {
+            return (GenericObject) ((List) value).get(0);
+        } else {
+            throw new RuntimeException("Empty keys are only allowed if the valie is a generic object.");
+        }
     }
 
     @Override

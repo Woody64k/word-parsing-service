@@ -8,7 +8,7 @@ import de.woody64k.services.word.model.content.ContentTableRow;
 import de.woody64k.services.word.model.content.WordContent;
 import de.woody64k.services.word.model.value.request.SearchRequirement;
 import de.woody64k.services.word.model.value.response.GenericObject;
-import de.woody64k.services.word.service.analyser.transform.Transformer;
+import de.woody64k.services.word.service.analyser.transform.ValueTransformer;
 
 public class DouplepointValueAnalyser {
 
@@ -31,7 +31,7 @@ public class DouplepointValueAnalyser {
         List<Object> result = new ArrayList<>();
         String condition = searchRequirement.getSearchTerm();
         for (String text = cell; text.contains(condition); text = text.substring(text.indexOf(condition) + condition.length())) {
-            Object foundValues = Transformer.transform(findInText(text, condition), searchRequirement.getTransform());
+            Object foundValues = ValueTransformer.transform(findInText(text, condition), searchRequirement.getTransform());
             if (foundValues != null) {
                 result.add(foundValues);
             }

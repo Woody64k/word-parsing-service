@@ -8,7 +8,7 @@ import de.woody64k.services.word.model.content.ContentTableRow;
 import de.woody64k.services.word.model.content.WordContent;
 import de.woody64k.services.word.model.value.request.SearchRequirement;
 import de.woody64k.services.word.model.value.response.GenericObject;
-import de.woody64k.services.word.service.analyser.transform.Transformer;
+import de.woody64k.services.word.service.analyser.transform.ValueTransformer;
 
 /**
  * Parses Tables with a heading column.
@@ -57,7 +57,7 @@ public class HeadingColumnAnalyser {
                 if (!cell.isBlank()) {
                     // collect values
                     // @implements: FR-02
-                    Object foundInformation = Transformer.transform(cell, searchRequirement.getTransform());
+                    Object foundInformation = ValueTransformer.transform(cell, searchRequirement.getTransform());
                     Object result = SubvalueScanner.scannForSubvalues(foundInformation, searchRequirement);
                     results.add(result);
                 }

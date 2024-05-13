@@ -63,11 +63,20 @@
 				"split": {
 					"by": ",",
 					"as": "values",
-					"values": {
-						"1": "topLevel",
-						"2": "MidLevel",
-						"3": "lowLevel"
-					}
+					"values": [
+						{
+							"position": 1,
+							"resultName": "topLevel"
+						},
+						{
+							"position": 2,
+							"resultName": "midLevel"
+						},
+						{
+							"position": 3,
+							"resultName": "lowLevel"
+						}
+					]
 				}
 			}
 		}
@@ -95,9 +104,15 @@
 							"by": ",",
 							"as": "values",
 							"values": {
-								"1": "laenge",
-								"2": "breite",
-								"3": "hoehe"
+								"1": {
+									"resultName": "length"
+								},
+								"2": {
+									"resultName": "with"
+								},
+								"3": {
+									"resultName": "hight"
+								}
 							}
 						}
 					}
@@ -129,6 +144,52 @@
 					],
 					"collect": [
 						"telephone"
+					]
+				}
+			}
+		},
+		{
+			"values": [
+				{
+					"searchTerm": "Datum",
+					"resultName": "date",
+					"transform": {
+						"subString": {
+							"endWords": [
+								"(prediction)",
+								"(happens)"
+							]
+						}
+					}
+				},
+				{
+					"searchTerm": "Datum",
+					"resultName": "isPrediction",
+					"transform": {
+						"subString": {
+							"startWords": [
+								"("
+							],
+							"endWords": [
+								")"
+							]
+						}
+					}
+				},
+				{
+					"searchTerm": "Temperatur",
+					"resultName": "temprature"
+				}
+			],
+			"name": "telefonnummern",
+			"transform": {
+				"merge": {
+					"by": [
+						"date"
+					],
+					"object": [
+						"isPrediction",
+						"temprature"
 					]
 				}
 			}

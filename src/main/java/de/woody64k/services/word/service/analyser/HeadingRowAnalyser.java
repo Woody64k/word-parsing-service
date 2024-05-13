@@ -12,7 +12,7 @@ import de.woody64k.services.word.model.value.request.ListRequirement;
 import de.woody64k.services.word.model.value.request.SearchRequirement;
 import de.woody64k.services.word.model.value.response.GenericObject;
 import de.woody64k.services.word.service.analyser.transform.ListTransformer;
-import de.woody64k.services.word.service.analyser.transform.Transformer;
+import de.woody64k.services.word.service.analyser.transform.ValueTransformer;
 
 public class HeadingRowAnalyser {
 
@@ -56,7 +56,7 @@ public class HeadingRowAnalyser {
         // read Values
         for (SearchRequirement valueRequ : listRequirement.getValues()) {
             Integer matchColumn = matches.get(valueRequ.getResultName());
-            oneRow.put(valueRequ.getResultName(), Transformer.transform(row.get(matchColumn), valueRequ.getTransform()));
+            oneRow.put(valueRequ.getResultName(), ValueTransformer.transform(row.get(matchColumn), valueRequ.getTransform()));
         }
         return oneRow;
     }

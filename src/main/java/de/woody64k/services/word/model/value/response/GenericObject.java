@@ -109,6 +109,14 @@ public class GenericObject extends LinkedHashMap<String, Object> {
                 results.add(object);
                 log.warn(String.format("Unsolved Collision for %s", key));
             }
+        } else if (existingObject instanceof GenericObject) {
+            if (object instanceof GenericObject) {
+                results.add(existingObject);
+                results.add(object);
+            } else {
+                results.add(object);
+                log.warn(String.format("Unsolved Collision for %s", key));
+            }
         } else {
             results.add(object);
             log.warn(String.format("Unsolved Collision for %s", key));

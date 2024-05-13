@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.woody64k.services.word.model.value.request.transform.ListTransformRequirement;
+import de.woody64k.services.word.model.value.request.transform.MergeTransform.MergeObject;
 import de.woody64k.services.word.model.value.response.GenericObject;
 
 public class ListTransformer {
@@ -20,13 +21,20 @@ public class ListTransformer {
         if (values != null && requ.getMerge() != null) {
             List<String> mergeKey = requ.getMerge().getBy();
             List<String> collectKey = requ.getMerge().getCollect();
+            List<MergeObject> objects = requ.getMerge().getObjects();
+
             for (GenericObject value : values) {
                 GenericObject match = findObjectInListByKey(value, mergedData, mergeKey);
                 if (match == null) {
                     // no match
-                    mergedData.add(value);
-                } else {
-                    match.putAll(value);
+                    match = value.sliceOut(mergeKey);
+                    mergedData.add(match);
+                }
+                if (collectKey != null) {
+                    match.putAll(value.sliceOut(collectKey));
+                }
+                for (MergeObject objectMapping : objects) {
+                    match.put(objectMapping.getResultName(), value.sliceOut(objectMapping.getValues()));
                 }
             }
         }

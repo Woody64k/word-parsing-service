@@ -8,4 +8,11 @@ import lombok.Data;
 public class MergeTransform {
     List<String> by;
     List<String> collect;
+    List<MergeObject> objects;
+
+    @Data
+    public static class MergeObject {
+        String resultName;
+        List<String> values;
+    }
 }

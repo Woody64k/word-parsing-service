@@ -187,9 +187,14 @@
 					"by": [
 						"date"
 					],
-					"object": [
-						"isPrediction",
-						"temprature"
+					"objects": [
+						{
+							"resultName": "weather",
+							"values": [
+								"isPrediction",
+								"temprature"
+							]
+						}
 					]
 				}
 			}

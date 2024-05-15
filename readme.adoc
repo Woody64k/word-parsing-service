@@ -109,16 +109,25 @@ URL to call swagger-ui is: http://localhost:8080/swagger-ui.html
 ----
 {
   "searchTerm": "Maße",
-  "resultName": "abmessung",
+  "resultName": "meassure",
   "transform": {
     "split": {
       "by": ",",
       "as": "values",
-      "values": {
-        "1": "laenge",
-        "2": "breite",
-        "3": "hoehe"
-      }
+      "values": [
+        {
+          "position": 1,
+          "resultName": "length"
+        },
+        {
+          "position": 2,
+          "resultName": "with"
+        },
+        {
+          "position": 3,
+          "resultName": "hight"
+        }
+      ]
     }
   }
 }

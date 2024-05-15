@@ -1,0 +1,4 @@
+app:
+  security:
+    clientId: 0815
+    clientSecret: 0815

@@ -103,17 +103,20 @@
 						"split": {
 							"by": ",",
 							"as": "values",
-							"values": {
-								"1": {
+							"values": [
+								{
+									"position": 1,
 									"resultName": "length"
 								},
-								"2": {
+								{
+									"position": 2,
 									"resultName": "with"
 								},
-								"3": {
+								{
+									"position": 3,
 									"resultName": "hight"
 								}
-							}
+							]
 						}
 					}
 				}

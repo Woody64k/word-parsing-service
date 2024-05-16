@@ -1,8 +1,7 @@
 package de.woody64k.services.word.security;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
@@ -21,11 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Order(1)
 public class AccessFilter implements Filter {
-    @Value("${app.security.clientId}")
-    private String clientId;
-
-    @Value("${app.security.clientSecret}")
-    private String clientSecret;
+    @Value("${app.security.apiKeys}")
+    private Set<String> apiKeys;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -34,15 +30,10 @@ public class AccessFilter implements Filter {
         if (path.contains("swagger") || path.contains("api-docs")) {
             chain.doFilter(request, response);
         } else {
-            String barer = httpReq.getHeader("Authorization");
-            if (barer != null && barer.startsWith("Basic ") && barer.length() > 6) {
-                String authData = new String(Base64.getDecoder().decode(barer.substring(6)), StandardCharsets.UTF_8);
-                String[] authInfo = authData.split(":");
-                if (authInfo.length == 2 && clientId.contentEquals(authInfo[0]) && clientSecret.contentEquals(authInfo[1])) {
-                    chain.doFilter(request, response);
-                } else {
-                    ((HttpServletResponse) response).sendError(403);
-                }
+            String apiKey = httpReq.getHeader("apiKey");
+            if (apiKey != null && apiKeys.contains(apiKey)) {
+                log.info(String.format("Accree from apiKey:", apiKey));
+                chain.doFilter(request, response);
             } else {
                 ((HttpServletResponse) response).sendError(403);
             }

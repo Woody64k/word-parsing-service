@@ -33,8 +33,10 @@ public class ListTransformer {
                 if (collectKey != null) {
                     match.putAll(value.sliceOut(collectKey));
                 }
-                for (MergeObject objectMapping : objects) {
-                    match.put(objectMapping.getResultName(), value.sliceOut(objectMapping.getValues()));
+                if (objects != null) {
+                    for (MergeObject objectMapping : objects) {
+                        match.put(objectMapping.getResultName(), value.sliceOut(objectMapping.getValues()));
+                    }
                 }
             }
         }

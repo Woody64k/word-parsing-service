@@ -1,5 +1,9 @@
 app:
   security:
-    clientId: ${CLIENT_ID}
-    clientSecret: ${CLIENT_SECRET}
+    apiKeys: ${API_KEYS}
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: ${ENABLE_SWAGGER_UI:false}
      

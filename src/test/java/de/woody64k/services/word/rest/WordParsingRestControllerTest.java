@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.woody64k.services.word.model.value.request.DocumentValueRequirement;
 import de.woody64k.services.word.model.value.response.WordValues;
 
+@ActiveProfiles("test")
 @SpringBootTest
 class WordParsingRestControllerTest {
     @Value("classpath:TestDocument-request.json")

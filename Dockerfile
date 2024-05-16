@@ -9,8 +9,6 @@ RUN mvn package -Pprod
 FROM eclipse-temurin:21-jre-alpine
 EXPOSE 8080
 WORKDIR /opt/word-parser
-ENV API_KEYS=
-ENV ENABLE_SWAGGER_UI=
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 COPY --from=builder /tmp/target/*.jar word-parser.jar

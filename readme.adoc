@@ -3,6 +3,19 @@
 == Setup
 
 URL to call swagger-ui is: http://localhost:8080/swagger-ui.html
+[%header, cols="1,2,4a"]
+|===
+| Env variable    | example | desciption
+| API_KEYS
+| 70b6e3950bb8d91b221a94cbe1850f11, 47faa76b53209f0f747740a71d1c8c84
+| Lists all apiKeys which will have access to the endpoint. They will be referenced in performance and access logs.
+*Default*: no default set, but the application will crash without given api key
+
+| ENABLE_SWAGGER_UI
+| true
+| If set to true this will enable the UI of swagger to test the endpoint and call it manually. (its recommented to have this as *false* in production)
+*Default*: *false*
+|===
 
 == Requierements
 

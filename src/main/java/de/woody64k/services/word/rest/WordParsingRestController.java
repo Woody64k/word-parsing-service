@@ -2,6 +2,7 @@ package de.woody64k.services.word.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +30,7 @@ public class WordParsingRestController {
     @Autowired
     private WordAnalyser analyser;
 
+    @CrossOrigin
     @PostMapping(value = "/content", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public WordContent parseWordContent(@RequestParam("file") MultipartFile uploadFile) {
         try {
@@ -38,6 +40,7 @@ public class WordParsingRestController {
         }
     }
 
+    @CrossOrigin
     @PostMapping(value = "/content/values", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @RequestBody(content = @Content(encoding = @Encoding(name = "request", contentType = "application/json")))
     public WordValues parseValuesFromWord(@RequestPart DocumentValueRequirement request, @RequestPart("file") MultipartFile uploadFile) {

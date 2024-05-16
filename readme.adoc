@@ -2,6 +2,13 @@
 
 == Setup
 
+.Example for testing
+[source,bash]
+----
+docker build -t word-parser-api:1.1.1 .
+docker run -p 8080:8080 -e API_KEYS='0815, 12' -e ENABLE_SWAGGER_UI='true' word-parser-api:1.1.1
+----
+
 URL to call swagger-ui is: http://localhost:8080/swagger-ui.html
 [%header, cols="1,2,4a"]
 |===

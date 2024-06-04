@@ -7,18 +7,15 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ContentTable extends ArrayList<ContentTableRow> {
-    private TABLE_TYPE type;
+public class ContentTable extends ArrayList<ContentTableRow> implements IContent {
+    private final ContentCategory contentCategory = ContentCategory.TABLE;
+    private TABLE_TYPE tableType;
     boolean filled = false;
 
     public ContentTableRow newRow() {
         ContentTableRow row = new ContentTableRow();
         add(row);
         return row;
-    }
-
-    public void addRow(ContentTableRow row) {
-        add(row);
     }
 
     public enum TABLE_TYPE {

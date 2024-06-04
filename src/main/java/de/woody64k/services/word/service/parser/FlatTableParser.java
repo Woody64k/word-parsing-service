@@ -15,12 +15,12 @@ public class FlatTableParser {
 
     public static ContentTable parseTable(XWPFTable table) {
         ContentTable contentTable = new ContentTable();
-        contentTable.setType(TABLE_TYPE.FLAT);
+        contentTable.setTableType(TABLE_TYPE.FLAT);
         for (XWPFTableRow row : table.getRows()) {
             ContentTableRow contentRow = parseRow(row);
             // @implements FR-05
             if (contentRow.isFilled()) {
-                contentTable.addRow(contentRow);
+                contentTable.add(contentRow);
                 contentTable.setFilled(true);
             }
         }

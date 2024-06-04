@@ -85,7 +85,7 @@ public class OleTableParser {
         List<ContentTable> tables = new ArrayList<>();
         for (Sheet sheet : workbook) {
             ContentTable contentTable = new ContentTable();
-            contentTable.setType(TABLE_TYPE.OLE);
+            contentTable.setTableType(TABLE_TYPE.OLE);
             for (Row row : sheet) {
                 ContentTableRow contentRow = new ContentTableRow();
                 for (Cell cell : row) {

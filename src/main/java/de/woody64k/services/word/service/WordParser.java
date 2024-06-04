@@ -3,6 +3,7 @@ package de.woody64k.services.word.service;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import org.apache.poi.xwpf.usermodel.IBodyElement;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -23,6 +24,9 @@ public class WordParser {
     public WordContent parseConent(MultipartFile uploadFile) {
         WordContent docContent = new WordContent();
         try (XWPFDocument doc = new XWPFDocument(new ByteArrayInputStream(uploadFile.getBytes()))) {
+            for (IBodyElement part : doc.getBodyElements()) {
+                log.info(String.format("Element: %s -> %s", part.getElementType(), part.getBody()));
+            }
             for (XWPFTable table : doc.getTables()) {
                 ContentTable contentTable = FlatTableParser.parseTable(table);
                 if (contentTable.isFilled()) {

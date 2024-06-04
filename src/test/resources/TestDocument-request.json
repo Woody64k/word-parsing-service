@@ -30,19 +30,18 @@
 		},
 		{
 			"searchTerm": "Kochbuch",
-			"resultName": "buch",
 			"values": [
 				{
 					"searchTerm": "Titel",
-					"resultName": "name"
+					"resultName": "buchName"
 				},
 				{
 					"searchTerm": "ISBN",
-					"resultName": "number"
+					"resultName": "buchNumber"
 				},
 				{
 					"searchTerm": "Autor",
-					"resultName": "autor"
+					"resultName": "buchAutor"
 				}
 			]
 		},

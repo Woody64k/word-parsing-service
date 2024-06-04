@@ -58,7 +58,7 @@ public class HeadingColumnAnalyser {
                     // collect values
                     // @implements: FR-02
                     Object foundInformation = ValueTransformer.transform(cell, searchRequirement.getTransform());
-                    Object result = SubvalueScanner.scannForSubvalues(foundInformation, searchRequirement);
+                    Object result = SubvalueScanner.scannForSubvalues(foundInformation, searchRequirement.getValues());
                     results.add(result);
                 }
             }

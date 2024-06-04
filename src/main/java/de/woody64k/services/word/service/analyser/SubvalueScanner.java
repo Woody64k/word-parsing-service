@@ -14,28 +14,19 @@ public class SubvalueScanner {
      * @param condition
      * @return
      */
-    public static Object scannForSubvalues(Object foundData, SearchRequirement condition) {
-        if (condition.getValues() != null && condition.getValues().size() > 0) {
+    public static Object scannForSubvalues(Object foundData, Collection<SearchRequirement> valueMappings) {
+        if (valueMappings != null && valueMappings.size() > 0) {
             if (foundData instanceof Collection) {
                 GenericObject newData = new GenericObject();
                 for (String oneFound : (Collection<String>) foundData) {
-                    newData.putAll(scannOneSubEntity(oneFound, condition));
+                    newData.putAll(scannSubdata(oneFound, valueMappings));
                 }
                 return newData;
             } else {
-                return scannOneSubEntity((String) foundData, condition);
+                return scannSubdata((String) foundData, valueMappings);
             }
         } else {
             return foundData;
-        }
-    }
-
-    public static GenericObject scannOneSubEntity(String oneFound, SearchRequirement condition) {
-        GenericObject newObject = scannSubdata(oneFound, condition.getValues());
-        if (condition.getResultName() != null) {
-            return GenericObject.create(condition.getResultName(), newObject);
-        } else {
-            return newObject;
         }
     }
 

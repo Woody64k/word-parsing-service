@@ -11,6 +11,6 @@ public interface IContent {
     }
 
     public static enum ContentCategory {
-        BLOCK, TEXT, TABLE
+        BLOCK, TEXT, TABLE, DOCUMENT
     }
 }

@@ -1,21 +1,25 @@
 package de.woody64k.services.word.model.content;
 
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.woody64k.services.word.model.content.elements.ParsedTable;
+import de.woody64k.services.word.model.content.elements.ParsedTableRow;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class ContentTable extends ArrayList<ContentTableRow> implements IContent {
-    private final ContentCategory contentCategory = ContentCategory.TABLE;
+public class ContentTable implements IContent {
     private TABLE_TYPE tableType;
-    boolean filled = false;
+    private ParsedTable table = new ParsedTable();
+    @JsonIgnore
+    private boolean filled = false;
 
-    public ContentTableRow newRow() {
-        ContentTableRow row = new ContentTableRow();
-        add(row);
-        return row;
+    public void add(ParsedTableRow row) {
+        table.add(row);
+    }
+
+    @Override
+    public ContentCategory getContentCategory() {
+        return ContentCategory.TABLE;
     }
 
     public enum TABLE_TYPE {

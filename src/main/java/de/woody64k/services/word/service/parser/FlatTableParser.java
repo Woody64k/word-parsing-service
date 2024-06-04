@@ -9,7 +9,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 import de.woody64k.services.word.model.content.ContentTable;
 import de.woody64k.services.word.model.content.ContentTable.TABLE_TYPE;
-import de.woody64k.services.word.model.content.ContentTableRow;
+import de.woody64k.services.word.model.content.elements.ParsedTableRow;
 
 public class FlatTableParser {
 
@@ -17,7 +17,7 @@ public class FlatTableParser {
         ContentTable contentTable = new ContentTable();
         contentTable.setTableType(TABLE_TYPE.FLAT);
         for (XWPFTableRow row : table.getRows()) {
-            ContentTableRow contentRow = parseRow(row);
+            ParsedTableRow contentRow = parseRow(row);
             // @implements FR-05
             if (contentRow.isFilled()) {
                 contentTable.add(contentRow);
@@ -27,8 +27,8 @@ public class FlatTableParser {
         return contentTable;
     }
 
-    public static ContentTableRow parseRow(XWPFTableRow row) {
-        ContentTableRow contentRow = new ContentTableRow();
+    public static ParsedTableRow parseRow(XWPFTableRow row) {
+        ParsedTableRow contentRow = new ParsedTableRow();
         for (XWPFTableCell cell : row.getTableCells()) {
             List<String> paragraphs = cell.getParagraphs().stream().map(x -> x.getParagraphText().trim()).collect(Collectors.toList());
             String value = String.join("\n", paragraphs);

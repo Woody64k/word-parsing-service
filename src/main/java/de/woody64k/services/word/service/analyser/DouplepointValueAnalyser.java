@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.woody64k.services.word.model.content.ContentTable;
-import de.woody64k.services.word.model.content.ContentTableRow;
 import de.woody64k.services.word.model.content.WordContent;
+import de.woody64k.services.word.model.content.elements.ParsedTableRow;
 import de.woody64k.services.word.model.value.request.SearchRequirement;
 import de.woody64k.services.word.model.value.response.GenericObject;
 import de.woody64k.services.word.service.analyser.transform.ValueTransformer;
@@ -15,7 +15,7 @@ public class DouplepointValueAnalyser {
     public static GenericObject analyse(WordContent parsedData, SearchRequirement searchRequirement) {
         GenericObject result = new GenericObject();
         for (ContentTable table : parsedData.getTables()) {
-            for (ContentTableRow row : table) {
+            for (ParsedTableRow row : table.getTable()) {
                 for (String cell : row) {
                     GenericObject foundValues = scanCell(cell, searchRequirement);
                     if (foundValues != null && foundValues.size() > 0) {

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.woody64k.services.word.model.content.ContentTable;
-import de.woody64k.services.word.model.content.ContentTableRow;
 import de.woody64k.services.word.model.content.WordContent;
+import de.woody64k.services.word.model.content.elements.ParsedTableRow;
 import de.woody64k.services.word.model.value.request.SearchRequirement;
 import de.woody64k.services.word.model.value.response.GenericObject;
 import de.woody64k.services.word.service.analyser.transform.ValueTransformer;
@@ -21,7 +21,7 @@ public class HeadingColumnAnalyser {
         GenericObject result = new GenericObject();
         for (ContentTable table : parsedData.getTables()) {
             boolean lastLineMatch = false;
-            for (ContentTableRow row : table) {
+            for (ParsedTableRow row : table.getTable()) {
                 if (lastLineMatch && row.get(0).isBlank()) {
                     // Handle merged cells
                     // @implements FR-03
@@ -39,7 +39,7 @@ public class HeadingColumnAnalyser {
         return result;
     }
 
-    private static GenericObject scanRow(SearchRequirement searchRequirement, ContentTableRow row) {
+    private static GenericObject scanRow(SearchRequirement searchRequirement, ParsedTableRow row) {
         boolean firstColumn = true;
         List<Object> results = new ArrayList<>();
         for (String cell : row) {

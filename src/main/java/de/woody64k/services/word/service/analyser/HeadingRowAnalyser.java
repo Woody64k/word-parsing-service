@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import de.woody64k.services.word.model.content.ContentTable;
-import de.woody64k.services.word.model.content.ContentTableRow;
 import de.woody64k.services.word.model.content.WordContent;
+import de.woody64k.services.word.model.content.elements.ParsedTableRow;
 import de.woody64k.services.word.model.value.request.ListRequirement;
 import de.woody64k.services.word.model.value.request.SearchRequirement;
 import de.woody64k.services.word.model.value.response.GenericObject;
@@ -32,7 +32,7 @@ public class HeadingRowAnalyser {
         int sizeFirstRow = 0;
         List<GenericObject> result = new ArrayList<>();
         Map<String, Integer> matches = new HashMap<>();
-        for (ContentTableRow row : table) {
+        for (ParsedTableRow row : table.getTable()) {
             if (firstRow) {
                 matches = scannHeader(row, listRequirement);
                 if (matches.size() != listRequirement.getValues().size()) {
@@ -51,7 +51,7 @@ public class HeadingRowAnalyser {
         return result;
     }
 
-    public static GenericObject readLine(Map<String, Integer> matches, ContentTableRow row, ListRequirement listRequirement) {
+    public static GenericObject readLine(Map<String, Integer> matches, ParsedTableRow row, ListRequirement listRequirement) {
         GenericObject oneRow = new GenericObject();
         // read Values
         for (SearchRequirement valueRequ : listRequirement.getValues()) {
@@ -70,7 +70,7 @@ public class HeadingRowAnalyser {
      * @return Map matching the resultName from SearchRequirement with the index of
      *         the column.
      */
-    private static Map<String, Integer> scannHeader(ContentTableRow row, ListRequirement listRequirement) {
+    private static Map<String, Integer> scannHeader(ParsedTableRow row, ListRequirement listRequirement) {
         Map<String, Integer> tableMap = new HashMap<>();
         for (SearchRequirement requirement : listRequirement.getValues()) {
             for (int i = 0; i < row.size(); i++) {

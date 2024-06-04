@@ -1,4 +1,4 @@
-package de.woody64k.services.word.model.content;
+package de.woody64k.services.word.model.content.elements;
 
 import java.util.ArrayList;
 
@@ -7,6 +7,6 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ContentTableRow extends ArrayList<String> {
+public class ParsedTableRow extends ArrayList<String> {
     boolean filled = false;
 }

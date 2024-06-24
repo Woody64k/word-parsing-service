@@ -29,7 +29,7 @@ public class GenericObject extends LinkedHashMap<String, Object> {
         } else if (value instanceof List && ((List) value).size() == 1) {
             return (GenericObject) ((List) value).get(0);
         } else {
-            throw new RuntimeException("Empty keys are only allowed if the value is a generic object.");
+            throw new RuntimeException("Empty values are only allowed if the value is a generic object.");
         }
     }
 
@@ -51,11 +51,13 @@ public class GenericObject extends LinkedHashMap<String, Object> {
 
     @Override
     public void putAll(Map<? extends String, ? extends Object> m) {
-        for (String key : m.keySet()) {
-            if (containsKey(key)) {
-                put(key, handleCollision(key, flattenSingleLists(m.get(key))));
-            } else {
-                put(key, flattenSingleLists(m.get(key)));
+        if (m != null) {
+            for (String key : m.keySet()) {
+                if (containsKey(key)) {
+                    put(key, handleCollision(key, flattenSingleLists(m.get(key))));
+                } else {
+                    put(key, flattenSingleLists(m.get(key)));
+                }
             }
         }
     }

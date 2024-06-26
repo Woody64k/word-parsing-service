@@ -33,30 +33,28 @@ public class GenericObject extends LinkedHashMap<String, Object> {
         }
     }
 
-    @Override
-    public Object put(String key, Object object) {
+    public Object putAndFlatten(String key, Object object, boolean flatten) {
         if (key != null) {
             if (containsKey(key)) {
-                return super.put(key, handleCollision(key, flattenSingleLists(object)));
+                return super.put(key, handleCollision(key, object, flatten));
             } else {
-                return super.put(key, flattenSingleLists(object));
+                return super.put(key, flatten ? flattenSingleLists(object) : object);
             }
         } else if (object instanceof GenericObject) {
-            putAll((GenericObject) object);
+            putAllAndFlatten((GenericObject) object, flatten);
             return object;
         } else {
             throw new RuntimeException("Empty keys are only allowed if the value is a list.");
         }
     }
 
-    @Override
-    public void putAll(Map<? extends String, ? extends Object> m) {
+    public void putAllAndFlatten(Map<? extends String, ? extends Object> m, boolean flatten) {
         if (m != null) {
             for (String key : m.keySet()) {
                 if (containsKey(key)) {
-                    put(key, handleCollision(key, flattenSingleLists(m.get(key))));
+                    putAndFlatten(key, handleCollision(key, m.get(key), flatten), flatten);
                 } else {
-                    put(key, flattenSingleLists(m.get(key)));
+                    putAndFlatten(key, flatten ? flattenSingleLists(m.get(key)) : m.get(key), flatten);
                 }
             }
         }
@@ -78,8 +76,9 @@ public class GenericObject extends LinkedHashMap<String, Object> {
         return slicedObject;
     }
 
-    private Object handleCollision(String key, Object object) {
-        Object existingObject = flattenSingleLists(get(key));
+    private Object handleCollision(String key, Object objectToInsert, boolean flatten) {
+        Object object = flatten ? flattenSingleLists(objectToInsert) : objectToInsert;
+        Object existingObject = flatten ? flattenSingleLists(get(key)) : get(key);
         Set<Object> results = new HashSet<>();
         if (existingObject instanceof String) {
             if (object instanceof String) {
@@ -123,7 +122,7 @@ public class GenericObject extends LinkedHashMap<String, Object> {
             results.add(object);
             log.warn(String.format("Unsolved Collision for %s", key));
         }
-        return flattenSingleLists(results);
+        return flatten ? flattenSingleLists(results) : results;
     }
 
     /**

@@ -19,7 +19,7 @@ public class DouplepointValueAnalyser {
                 for (String cell : row) {
                     GenericObject foundValues = scanCell(cell, searchRequirement);
                     if (foundValues != null && foundValues.size() > 0) {
-                        result.putAll(foundValues);
+                        result.putAllAndFlatten(foundValues, true);
                     }
                 }
             }

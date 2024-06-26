@@ -31,7 +31,7 @@ public class HeadingColumnAnalyser {
                 }
                 GenericObject foundValues = scanRow(searchRequirement, row);
                 if (foundValues != null && foundValues.size() > 0) {
-                    result.putAll(foundValues);
+                    result.putAllAndFlatten(foundValues, true);
                     lastLineMatch = true;
                 }
             }

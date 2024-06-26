@@ -56,7 +56,7 @@ public class HeadingRowAnalyser {
         // read Values
         for (SearchRequirement valueRequ : listRequirement.getValues()) {
             Integer matchColumn = matches.get(valueRequ.getResultName());
-            oneRow.put(valueRequ.getResultName(), ValueTransformer.transform(row.get(matchColumn), valueRequ.getTransform()));
+            oneRow.putAndFlatten(valueRequ.getResultName(), ValueTransformer.transform(row.get(matchColumn), valueRequ.getTransform()), false);
         }
         return oneRow;
     }

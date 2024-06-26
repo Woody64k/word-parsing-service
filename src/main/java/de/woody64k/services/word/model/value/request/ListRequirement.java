@@ -7,6 +7,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ListRequirement extends ValueRequirements {
-    String name;
+    String resultName;
     ListTransformRequirement transform;
 }

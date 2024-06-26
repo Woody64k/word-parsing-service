@@ -6,8 +6,11 @@ import lombok.Data;
 
 @Data
 public class MergeTransform {
+    // The merge Key
     List<String> by;
+    // Single value arrays
     List<String> collect;
+    // Complex value objects
     List<MergeObject> objects;
 
     @Data

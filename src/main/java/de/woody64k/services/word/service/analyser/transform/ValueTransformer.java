@@ -26,6 +26,8 @@ public class ValueTransformer {
                         return substringFromEnd(textAfterStart, requ);
                     }
                 }
+                // if startWord is not contained in text
+                return null;
             } else {
                 return substringFromEnd(value, requ);
             }

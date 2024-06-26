@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class ListTransformRequirement {
     MergeTransform merge;
+    FilterTransform filter;
 }

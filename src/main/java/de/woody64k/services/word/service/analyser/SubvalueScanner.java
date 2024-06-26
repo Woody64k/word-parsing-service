@@ -19,7 +19,7 @@ public class SubvalueScanner {
             if (foundData instanceof Collection) {
                 GenericObject newData = new GenericObject();
                 for (String oneFound : (Collection<String>) foundData) {
-                    newData.putAll(scannSubdata(oneFound, valueMappings));
+                    newData.putAllAndFlatten(scannSubdata(oneFound, valueMappings), true);
                 }
                 return newData;
             } else {
@@ -33,7 +33,7 @@ public class SubvalueScanner {
     private static GenericObject scannSubdata(String foundData, Collection<SearchRequirement> searchRequ) {
         GenericObject response = new GenericObject();
         for (SearchRequirement condition : searchRequ) {
-            response.putAll(DouplepointValueAnalyser.scanCell(foundData, condition));
+            response.putAllAndFlatten(DouplepointValueAnalyser.scanCell(foundData, condition), true);
         }
         return response;
     }

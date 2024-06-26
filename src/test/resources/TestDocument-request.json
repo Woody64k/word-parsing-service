@@ -120,7 +120,7 @@
 					}
 				}
 			],
-			"name": "haustiere"
+			"resultName": "haustiere"
 		},
 		{
 			"values": [
@@ -137,7 +137,7 @@
 					"resultName": "telephone"
 				}
 			],
-			"name": "telefonnummern",
+			"resultName": "telefonnummern",
 			"transform": {
 				"merge": {
 					"by": [
@@ -183,7 +183,7 @@
 					"resultName": "temprature"
 				}
 			],
-			"name": "telefonnummern",
+			"resultName": "wettervorhersage",
 			"transform": {
 				"merge": {
 					"by": [
@@ -196,6 +196,18 @@
 								"isPrediction",
 								"temprature"
 							]
+						}
+					]
+				},
+				"filter": {
+					"or": [
+						{
+							"value": "isPrediction",
+							"equals": "prediction"
+						},
+						{
+							"value": "isPrediction",
+							"isEmpty": true
 						}
 					]
 				}

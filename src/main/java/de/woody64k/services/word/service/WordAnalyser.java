@@ -22,7 +22,7 @@ public class WordAnalyser {
         WordValues result = new WordValues();
         result.integrate(parseFlatValues(parsedData, request.getValues()));
         for (ListRequirement listRequ : request.getLists()) {
-            result.addValues(listRequ.getName(), HeadingRowAnalyser.analyse(parsedData, listRequ));
+            result.addValues(listRequ.getResultName(), HeadingRowAnalyser.analyse(parsedData, listRequ));
         }
         return result;
     }

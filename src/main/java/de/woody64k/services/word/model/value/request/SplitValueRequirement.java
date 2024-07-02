@@ -5,7 +5,8 @@ import lombok.Data;
 
 @Data
 public class SplitValueRequirement {
-    int position;
+    Integer position;
+    Integer fromPosition;
     String resultName;
     ValueTransformRequirement transform;
 }

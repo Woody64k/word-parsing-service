@@ -43,24 +43,36 @@ class WordParsingRestControllerTest {
     @Test
     void testValueMapper() {
         try {
-            MockMultipartFile testFile = new MockMultipartFile("TestDokument", "TestDokument.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", Files.readAllBytes(wordFile.getFile().toPath()));
+            MockMultipartFile testFile = new MockMultipartFile("TestDokument", "TestDokument.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", Files.readAllBytes(wordFile.getFile()
+                    .toPath()));
             DocumentValueRequirement valueRequest = mapper.readValue(requestFile.getFile(), DocumentValueRequirement.class);
             WordValues result = analyser.parseValuesFromWord(valueRequest, testFile);
-            assertTrue(result.getData().size() > 0);
+            assertTrue(result.getData()
+                    .size() > 0);
+            assertSplit(result);
             assertMergeAndFilter(result);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
+    private void assertSplit(WordValues result) {
+        List<GenericObject> pets = (List<GenericObject>) result.getData()
+                .get("pets");
+        GenericObject measures = (GenericObject) pets.get(0)
+                .get("measures");
+        assertTrue(((String) measures.get("additionalSizeInformation")).contentEquals("Wingspan: 24 cm"));
+    }
+
     public void assertMergeAndFilter(WordValues result) {
-        List<GenericObject> mergeAndFilterTestData = (List<GenericObject>) result.getData().get("wettervorhersage");
+        List<GenericObject> mergeAndFilterTestData = (List<GenericObject>) result.getData()
+                .get("wettervorhersage");
         assertTrue(mergeAndFilterTestData.size() == 3);
         for (GenericObject mergedData : mergeAndFilterTestData) {
             List<GenericObject> filteredData = (List<GenericObject>) mergedData.get("weather");
             assertTrue(filteredData.size() == 1);
-            String filteredValue = (String) filteredData.get(0).get("isPrediction");
+            String filteredValue = (String) filteredData.get(0)
+                    .get("isPrediction");
             assertTrue(filteredValue == null || filteredValue.isBlank() || filteredValue.contentEquals("prediction"));
         }
     }

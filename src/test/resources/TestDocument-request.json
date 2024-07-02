@@ -74,6 +74,10 @@
 						{
 							"position": 3,
 							"resultName": "lowLevel"
+						},
+						{
+							"fromPosition": 1,
+							"resultName": "allLevel"
 						}
 					]
 				}
@@ -97,7 +101,7 @@
 				},
 				{
 					"searchTerm": "Maße",
-					"resultName": "abmessung",
+					"resultName": "measures",
 					"transform": {
 						"split": {
 							"by": ",",
@@ -114,13 +118,17 @@
 								{
 									"position": 3,
 									"resultName": "hight"
+								},
+								{
+									"fromPosition": 4,
+									"resultName": "additionalSizeInformation"
 								}
 							]
 						}
 					}
 				}
 			],
-			"resultName": "haustiere"
+			"resultName": "pets"
 		},
 		{
 			"values": [

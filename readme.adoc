@@ -61,6 +61,10 @@ When running in docker while connected to vpn, *localhost* may not work. (theref
 | BR-06 [[BR-06]] 
 | Split values to structure
 | As User I want to split results into a a structure defining the name of each part of split.
+
+| BR-07 [[BR-07]]
+| Split tail of values to Structure
+| As User I want to collect the values from a specific character position till end.
 |===
 
 === Functional Requirements
@@ -127,7 +131,8 @@ When running in docker while connected to vpn, *localhost* may not work. (theref
 ----
 
 | FR-09 [[FR-09]]
-| * <<BR-06,BR-06>>      
+| * <<BR-06,BR-06>>     
+  * <<BR-07, BR-07>> 
 | Transformation - split to struct
 | To describe the transformation via split into a a struct.
 [source,json]
@@ -151,6 +156,10 @@ When running in docker while connected to vpn, *localhost* may not work. (theref
         {
           "position": 3,
           "resultName": "hight"
+        },
+        {
+          "formPosition": 4,
+          "resultName": "additionlSizeInformation"
         }
       ]
     }

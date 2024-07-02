@@ -2,7 +2,7 @@ app:
   security:
     apiKeys: ${API_KEYS}
     throttle:
-      limit: ${THROTTLE_AMOUNT:200}
+      limit: ${THROTTLE_LIMIT:200}
       period: ${THROTTLE_PERIOD:3600000}
 springdoc:
   api-docs:

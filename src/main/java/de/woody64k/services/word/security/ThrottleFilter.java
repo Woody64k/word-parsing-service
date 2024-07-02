@@ -6,6 +6,7 @@ import java.time.Duration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.ratelimiter.RateLimiterConfig;
@@ -52,8 +53,13 @@ public class ThrottleFilter implements Filter {
             String apiKey = httpReq.getHeader("apiKey");
             RateLimiter limiter = rateLimiterRegistry.rateLimiter(apiKey);
             if (limiter.acquirePermission()) {
+                StopWatch watch = new StopWatch();
+                watch.start();
                 chain.doFilter(request, response);
+                watch.stop();
+                log.info(String.format("Access from apiKey '%s' to '%s' (duration: %s seconds)", apiKey, path, watch.getTotalTimeSeconds()));
             } else {
+                log.info(String.format("Limit Reached for API key '%s'. (Tried to access: '%s')", apiKey, path));
                 ((HttpServletResponse) response).sendError(429);
             }
         }

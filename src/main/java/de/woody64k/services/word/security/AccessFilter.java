@@ -6,7 +6,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StopWatch;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -15,9 +14,7 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Component
 @Order(1)
 public class AccessFilter implements Filter {
@@ -33,11 +30,7 @@ public class AccessFilter implements Filter {
         } else {
             String apiKey = httpReq.getHeader("apiKey");
             if (apiKey != null && apiKeys.contains(apiKey)) {
-                StopWatch watch = new StopWatch();
-                watch.start();
                 chain.doFilter(request, response);
-                watch.stop();
-                log.info(String.format("Access from apiKey '%s' to '%s' (duration: %s seconds)", apiKey, path, watch.getTotalTimeSeconds()));
             } else {
                 ((HttpServletResponse) response).sendError(403);
             }

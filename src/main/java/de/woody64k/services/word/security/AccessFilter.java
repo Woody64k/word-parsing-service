@@ -24,8 +24,7 @@ public class AccessFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpReq = (HttpServletRequest) request;
-        String path = httpReq.getRequestURI();
-        if (path.contains("swagger") || path.contains("api-docs")) {
+        if (SwaggerExcluder.isSwaggerUi(httpReq)) {
             chain.doFilter(request, response);
         } else {
             String apiKey = httpReq.getHeader("apiKey");

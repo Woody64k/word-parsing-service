@@ -46,8 +46,7 @@ public class ThrottleFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpReq = (HttpServletRequest) request;
-        String path = httpReq.getRequestURI();
-        if (path.contains("swagger") || path.contains("api-docs")) {
+        if (SwaggerExcluder.isSwaggerUi(httpReq)) {
             chain.doFilter(request, response);
         } else {
             String apiKey = httpReq.getHeader("apiKey");
@@ -57,9 +56,9 @@ public class ThrottleFilter implements Filter {
                 watch.start();
                 chain.doFilter(request, response);
                 watch.stop();
-                log.info(String.format("Access from apiKey '%s' to '%s' (duration: %s seconds)", apiKey, path, watch.getTotalTimeSeconds()));
+                log.info(String.format("Access from apiKey '%s' to '%s' (duration: %s seconds)", apiKey, httpReq.getRequestURI(), watch.getTotalTimeSeconds()));
             } else {
-                log.info(String.format("Limit Reached for API key '%s'. (Tried to access: '%s')", apiKey, path));
+                log.info(String.format("Limit Reached for API key '%s'. (Tried to access: '%s')", apiKey, httpReq.getRequestURI()));
                 ((HttpServletResponse) response).sendError(429);
             }
         }

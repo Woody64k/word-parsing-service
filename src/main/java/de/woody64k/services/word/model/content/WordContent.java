@@ -34,7 +34,8 @@ public class WordContent implements IContent {
     }
 
     public void addTables(Collection<ContentTable> tables) {
-        getBlock().getContent().addAll(tables);
+        getBlock().getContent()
+                .addAll(tables);
     }
 
     public void addText(String text) {
@@ -43,12 +44,14 @@ public class WordContent implements IContent {
 
     public void addBlock(String text, Integer headingLevel) {
         ContentBlock block = ContentBlock.create(text, headingLevel);
-        for (; !chapterStack.isEmpty() && chapterStack.lastElement().getLevel() >= block.getLevel(); chapterStack.removeLast())
+        for (; !chapterStack.isEmpty() && chapterStack.lastElement()
+                .getLevel() >= block.getLevel(); chapterStack.removeLast())
             ;
         if (chapterStack.isEmpty()) {
             content.add(block);
         } else {
-            chapterStack.lastElement().add(block);
+            chapterStack.lastElement()
+                    .add(block);
         }
         chapterStack.push(block);
     }
@@ -64,7 +67,9 @@ public class WordContent implements IContent {
     @JsonIgnore
     public List<ContentTable> getTables() {
         List<IContent> content = getAllByCathegory(ContentCategory.TABLE);
-        return content.stream().map(block -> (ContentTable) block).collect(Collectors.toList());
+        return content.stream()
+                .map(block -> (ContentTable) block)
+                .collect(Collectors.toList());
     }
     // END of Legacy Stuff
 
@@ -72,11 +77,34 @@ public class WordContent implements IContent {
     public List<IContent> getAllByCathegory(ContentCategory category) {
         List<IContent> results = new ArrayList<>();
         for (IContent content : getContent()) {
-            if (content.getContentCategory().equals(category)) {
+            if (content.getContentCategory()
+                    .equals(category)) {
                 results.add(content);
             }
             results.addAll(content.getAllByCathegory(category));
         }
         return results;
+    }
+
+    public String flattenToString() {
+        if (chapterStack.isEmpty()) {
+            for (IContent element : getContent()) {
+                if (!element.getContentCategory()
+                        .equals(ContentCategory.TEXT)) {
+                    return null;
+                }
+            }
+            List<String> paragraphs = getContent().stream()
+                    .map(x -> ((ContentText) x).getText()
+                            .trim())
+                    .collect(Collectors.toList());
+            return String.join("\n", paragraphs);
+        }
+        return null;
+    }
+
+    @JsonIgnore
+    public boolean isEmpty() {
+        return chapterStack.isEmpty() && content.isEmpty();
     }
 }

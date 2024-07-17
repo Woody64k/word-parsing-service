@@ -1,5 +1,8 @@
 package de.woody64k.services.word.model.content;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.woody64k.services.word.model.content.elements.ParsedTable;
@@ -20,6 +23,20 @@ public class ContentTable implements IContent {
     @Override
     public ContentCategory getContentCategory() {
         return ContentCategory.TABLE;
+    }
+
+    @Override
+    public List<IContent> getAllByCathegory(ContentCategory category) {
+        List<IContent> collection = new ArrayList<>();
+        for (ParsedTableRow row : table) {
+            for (Object cell : row) {
+                if (cell instanceof WordContent) {
+                    WordContent embeddedDoc = (WordContent) cell;
+                    collection.addAll(embeddedDoc.getAllByCathegory(category));
+                }
+            }
+        }
+        return collection;
     }
 
     public enum TABLE_TYPE {

@@ -35,7 +35,8 @@ public class HeadingRowAnalyser {
         for (ParsedTableRow row : table.getTable()) {
             if (firstRow) {
                 matches = scannHeader(row, listRequirement);
-                if (matches.size() != listRequirement.getValues().size()) {
+                if (matches.size() != listRequirement.getValues()
+                        .size()) {
                     // FR-06
                     // Abort if no match
                     return null;
@@ -56,7 +57,8 @@ public class HeadingRowAnalyser {
         // read Values
         for (SearchRequirement valueRequ : listRequirement.getValues()) {
             Integer matchColumn = matches.get(valueRequ.getResultName());
-            oneRow.putAndFlatten(valueRequ.getResultName(), ValueTransformer.transform(row.get(matchColumn), valueRequ.getTransform()), false);
+            String text = (String) row.get(matchColumn);
+            oneRow.putAndFlatten(valueRequ.getResultName(), ValueTransformer.transform(text, valueRequ.getTransform()), false);
         }
         return oneRow;
     }
@@ -74,9 +76,8 @@ public class HeadingRowAnalyser {
         Map<String, Integer> tableMap = new HashMap<>();
         for (SearchRequirement requirement : listRequirement.getValues()) {
             for (int i = 0; i < row.size(); i++) {
-                if (row.get(i).equalsIgnoreCase(requirement.getSearchTerm())) {
+                if (row.get(i) instanceof String && ((String) row.get(i)).equalsIgnoreCase(requirement.getSearchTerm()))
                     tableMap.put(requirement.getResultName(), i);
-                }
             }
         }
         return tableMap;

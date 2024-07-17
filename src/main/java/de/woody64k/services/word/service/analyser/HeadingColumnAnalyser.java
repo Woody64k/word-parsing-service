@@ -1,8 +1,5 @@
 package de.woody64k.services.word.service.analyser;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.woody64k.services.word.model.content.ContentTable;
 import de.woody64k.services.word.model.content.WordContent;
 import de.woody64k.services.word.model.content.elements.ParsedTableRow;
@@ -22,7 +19,7 @@ public class HeadingColumnAnalyser {
         for (ContentTable table : parsedData.getTables()) {
             boolean lastLineMatch = false;
             for (ParsedTableRow row : table.getTable()) {
-                if (lastLineMatch && row.get(0).isBlank()) {
+                if (row.get(0) instanceof String && lastLineMatch && ((String) row.get(0)).isBlank()) {
                     // Handle merged cells
                     // @implements FR-03
                     row.set(0, searchRequirement.getSearchTerm());
@@ -41,29 +38,33 @@ public class HeadingColumnAnalyser {
 
     private static GenericObject scanRow(SearchRequirement searchRequirement, ParsedTableRow row) {
         boolean firstColumn = true;
-        List<Object> results = new ArrayList<>();
-        for (String cell : row) {
-            // first column matches
-            if (firstColumn) {
-                if (cell.equalsIgnoreCase(searchRequirement.getSearchTerm())) {
-                    // match
-                    firstColumn = false;
+        GenericObject results = new GenericObject();
+        for (Object cell : row) {
+            String value;
+            if (cell instanceof String) {
+                value = (String) cell;
+                // first column matches
+                if (firstColumn) {
+                    if (value.equalsIgnoreCase(searchRequirement.getSearchTerm())) {
+                        // match
+                        firstColumn = false;
+                    } else {
+                        // no match (abort)
+                        return null;
+                    }
                 } else {
-                    // no match (abort)
-                    return null;
+                    // if matches
+                    if (!value.isBlank()) {
+                        // collect values
+                        Object foundInformation = ValueTransformer.transform(value, searchRequirement.getTransform());
+                        Object result = SubvalueScanner.scannForSubvalues(foundInformation, searchRequirement.getValues());
+                        results.putAndFlatten(searchRequirement.getResultName(), result, true);
+                    }
                 }
-            } else {
-                // if matches
-                if (!cell.isBlank()) {
-                    // collect values
-                    // @implements: FR-02
-                    Object foundInformation = ValueTransformer.transform(cell, searchRequirement.getTransform());
-                    Object result = SubvalueScanner.scannForSubvalues(foundInformation, searchRequirement.getValues());
-                    results.add(result);
-                }
+            } else if (cell instanceof WordContent) {
+                results.putAndFlatten(null, analyse((WordContent) cell, searchRequirement), false);
             }
         }
-        return GenericObject.create(searchRequirement.getResultName(), results);
+        return results;
     }
-
 }

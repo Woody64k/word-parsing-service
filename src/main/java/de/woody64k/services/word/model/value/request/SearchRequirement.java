@@ -9,5 +9,6 @@ import lombok.EqualsAndHashCode;
 public class SearchRequirement extends ValueRequirements {
     String searchTerm;
     String resultName;
+    String defaultVaule;
     ValueTransformRequirement transform;
 }

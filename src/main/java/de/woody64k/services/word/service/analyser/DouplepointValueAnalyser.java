@@ -16,8 +16,13 @@ public class DouplepointValueAnalyser {
         GenericObject result = new GenericObject();
         for (ContentTable table : parsedData.getTables()) {
             for (ParsedTableRow row : table.getTable()) {
-                for (String cell : row) {
-                    GenericObject foundValues = scanCell(cell, searchRequirement);
+                for (Object cell : row) {
+                    GenericObject foundValues = null;
+                    if (cell instanceof String) {
+                        foundValues = scanCell((String) cell, searchRequirement);
+                    } else if (cell instanceof WordContent) {
+                        foundValues = analyse((WordContent) cell, searchRequirement);
+                    }
                     if (foundValues != null && foundValues.size() > 0) {
                         result.putAllAndFlatten(foundValues, true);
                     }
@@ -48,7 +53,8 @@ public class DouplepointValueAnalyser {
             String other = text.substring(text.indexOf(condition) + condition.length());
             String otherTillEol = other.contains("\n") ? other.substring(0, other.indexOf("\n")) : other;
             if (otherTillEol.contains(":")) {
-                return otherTillEol.substring(otherTillEol.indexOf(":") + 1).trim();
+                return otherTillEol.substring(otherTillEol.indexOf(":") + 1)
+                        .trim();
             }
         }
         return null;

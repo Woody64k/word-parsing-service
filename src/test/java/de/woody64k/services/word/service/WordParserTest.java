@@ -29,7 +29,9 @@ class WordParserTest {
 
     @BeforeAll
     static void setUpBeforeClass() throws Exception {
-        file = new File(WordParserTest.class.getClassLoader().getResource("TestDokument.docx").getFile());
+        file = new File(WordParserTest.class.getClassLoader()
+                .getResource("TestDokument.docx")
+                .getFile());
 
     }
 
@@ -39,7 +41,8 @@ class WordParserTest {
             MockMultipartFile testFile = new MockMultipartFile("TestDokument", "TestDokument.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", Files.readAllBytes(file.toPath()));
 
             WordContent content = parser.parseConent(testFile);
-            assertTrue(content.getTables().size() == 4, "Number of found Tables is wrong.");
+            assertTrue(content.getTables()
+                    .size() == 6, "Number of found Tables is wrong.");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -53,7 +56,8 @@ class WordParserTest {
 
             WordParser parser = new WordParser();
             WordContent content = parser.parseConent(testFile);
-            assertTrue(content.getTables().size() == 4, "Number of found Tables is wrong.");
+            assertTrue(content.getTables()
+                    .size() == 6, "Number of found Tables is wrong.");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

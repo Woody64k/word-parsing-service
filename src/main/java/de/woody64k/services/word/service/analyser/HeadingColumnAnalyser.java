@@ -62,6 +62,7 @@ public class HeadingColumnAnalyser {
                     }
                 }
             } else if (cell instanceof WordContent) {
+                // FR-10: handle embedded Documents
                 results.putAndFlatten(null, analyse((WordContent) cell, searchRequirement), false);
             }
         }

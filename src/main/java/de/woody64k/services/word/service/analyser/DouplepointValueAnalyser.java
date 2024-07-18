@@ -21,6 +21,7 @@ public class DouplepointValueAnalyser {
                     if (cell instanceof String) {
                         foundValues = scanCell((String) cell, searchRequirement);
                     } else if (cell instanceof WordContent) {
+                        // FR-10: handle embedded Documents
                         foundValues = analyse((WordContent) cell, searchRequirement);
                     }
                     if (foundValues != null && foundValues.size() > 0) {

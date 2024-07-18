@@ -166,4 +166,10 @@ When running in docker while connected to vpn, *localhost* may not work. (theref
   }
 }
 ----
+| FR-10 [[FR-10]]
+| * <<BR-04, BR-04>>
+* <<BR-02, BR-02>>
+| Layout Tables
+| Sometimes Tables are used for Layouting and contain values such as other Tables, headings and other structures. These sould be handled by parsingthese columns in the same way like the document and embed them.
+If possible leave the cells as string if they just contain text.
 |===

@@ -32,6 +32,8 @@ public class FlatTableParser {
         ParsedTableRow contentRow = new ParsedTableRow();
         for (XWPFTableCell cell : row.getTableCells()) {
             List<IBodyElement> elemnts = cell.getBodyElements();
+
+            // FR-10: handle embedded Documents
             BodyElementParser parser = new BodyElementParser();
             WordContent cellContent = parser.parseBodyElements(elemnts);
             contentRow.add(cellContent);

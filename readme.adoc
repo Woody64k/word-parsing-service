@@ -26,7 +26,17 @@ When running in docker while connected to vpn, *localhost* may not work. (theref
 | ENABLE_SWAGGER_UI
 | true
 | If set to true this will enable the UI of swagger to test the endpoint and call it manually. (its recommented to have this as *false* in production)
-*Default*: *false*
+*Default: false*
+
+| THROTTLE_LIMIT
+| 200
+| Maximum number of calls allowed within a THROTTLE_PERIOD per API key. (Each key has its own limit)
+*Default: 200*
+
+| THROTTLE_PERIOD
+| 3600000
+| Time after which the THROTTLE_LIMIT is refreshed. (Specified in milliseconds)
+*Default: 3600000*
 |===
 
 == Requierements

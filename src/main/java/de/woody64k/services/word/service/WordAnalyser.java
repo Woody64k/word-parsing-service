@@ -9,6 +9,7 @@ import de.woody64k.services.word.model.value.request.DocumentValueRequirement;
 import de.woody64k.services.word.model.value.request.ListRequirement;
 import de.woody64k.services.word.model.value.request.SearchRequirement;
 import de.woody64k.services.word.model.value.response.WordValues;
+import de.woody64k.services.word.service.analyser.DefaultValueSetter;
 import de.woody64k.services.word.service.analyser.DouplepointValueAnalyser;
 import de.woody64k.services.word.service.analyser.HeadingColumnAnalyser;
 import de.woody64k.services.word.service.analyser.HeadingRowAnalyser;
@@ -32,6 +33,7 @@ public class WordAnalyser {
         for (SearchRequirement condition : searchRequ) {
             result.integrate(HeadingColumnAnalyser.analyse(parsedData, condition));
             result.integrate(DouplepointValueAnalyser.analyse(parsedData, condition));
+            result.integrate(DefaultValueSetter.setDefaultValue(result.getData(), condition));
         }
         return result;
     }

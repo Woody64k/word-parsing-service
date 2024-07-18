@@ -51,9 +51,16 @@ class WordParsingRestControllerTest {
                     .size() > 0);
             assertSplit(result);
             assertMergeAndFilter(result);
+            assertDefaultValue(result);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void assertDefaultValue(WordValues result) {
+        Object value = result.getData()
+                .get("defaultValue");
+        assertTrue(((String) value).contentEquals("Default Test Value"));
     }
 
     private void assertSplit(WordValues result) {

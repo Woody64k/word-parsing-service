@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ParsedTableRow extends ArrayList<Object> {
+    private static final long serialVersionUID = 1L;
     boolean filled = false;
 
     public void add(String text) {

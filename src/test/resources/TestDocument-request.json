@@ -29,6 +29,11 @@
 			"resultName": "fotos"
 		},
 		{
+			"searchTerm": "Quetzacoatl",
+			"resultName": "defaultValue",
+			"defaultVaule": "Default Test Value"
+		},
+		{
 			"searchTerm": "Kochbuch",
 			"values": [
 				{

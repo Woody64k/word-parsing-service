@@ -6,8 +6,8 @@ import de.woody64k.services.word.model.value.response.GenericObject;
 public class DefaultValueSetter {
     public static GenericObject setDefaultValue(GenericObject object, SearchRequirement requirement) {
         GenericObject newDefaultObject = new GenericObject();
-        if (object.get(requirement.getResultName()) == null && requirement.getDefaultVaule() != null) {
-            newDefaultObject.put(requirement.getResultName(), requirement.getDefaultVaule());
+        if (object.get(requirement.getResultName()) == null && requirement.getDefaultValue() != null) {
+            newDefaultObject.put(requirement.getResultName(), requirement.getDefaultValue());
         }
         return newDefaultObject;
     }

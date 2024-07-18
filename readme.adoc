@@ -69,6 +69,10 @@ When running in docker while connected to vpn, *localhost* may not work. (theref
 | BR-08 [[BR-08]]
 | Default Values
 | As User I want to define default values which will be used if a value is not found, to avoid checking null values afterwards and set them.
+
+| BR-09 [[BR-09]] 
+| Parse text below Heading
+| As User I want to parse the text content below a Heading.
 |===
 
 === Functional Requirements
@@ -174,7 +178,7 @@ When running in docker while connected to vpn, *localhost* may not work. (theref
 | * <<BR-04, BR-04>>
 * <<BR-02, BR-02>>
 | Layout Tables
-| Sometimes Tables are used for Layouting and contain values such as other Tables, headings and other structures. These sould be handled by parsingthese columns in the same way like the document and embed them.
+| Sometimes Tables are used for Layouting and contain values such as other Tables, headings and other structures. These should be handled by parsing these columns in the same way like the document and embed them.
 If possible leave the cells as string if they just contain text.
 
 | FR-11 [[FR-11]]
@@ -189,4 +193,10 @@ If possible leave the cells as string if they just contain text.
   "default": "0cm x 0cm x 0cm"
 }
 ----
+
+| FR-12 [[FR-12]]
+| * <<BR-09, BR-09>>
+| Parse full chapter below Heading
+| To Read a chapter we will combin all headings of a block and all texts separated by a newline. We will ignore tables while reading a chapter.
+
 |===

@@ -116,7 +116,6 @@ public class OleTableParser {
 
     private static String getCellValue(Cell cell) {
         if (cell.getCellType() == CellType.FORMULA) {
-            System.out.println("Formula is " + cell.getCellFormula());
             switch (cell.getCachedFormulaResultType()) {
                 case CellType.NUMERIC:
                     return String.valueOf(cell.getNumericCellValue());

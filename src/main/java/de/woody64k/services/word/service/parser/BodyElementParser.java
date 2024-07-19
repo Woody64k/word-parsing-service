@@ -10,11 +10,15 @@ import org.apache.poi.xwpf.usermodel.XWPFTable;
 
 import de.woody64k.services.word.model.content.ContentTable;
 import de.woody64k.services.word.model.content.WordContent;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BodyElementParser {
     Integer headingNumId;
 
@@ -23,7 +27,7 @@ public class BodyElementParser {
         for (IBodyElement cnt : bodyElements) {
             switch (cnt.getElementType()) {
                 case BodyElementType.TABLE: {
-                    ContentTable contentTable = FlatTableParser.parseTable((XWPFTable) cnt);
+                    ContentTable contentTable = FlatTableParser.parseTable((XWPFTable) cnt, headingNumId);
                     if (contentTable.isFilled()) {
                         docContent.addTable(contentTable);
                     }

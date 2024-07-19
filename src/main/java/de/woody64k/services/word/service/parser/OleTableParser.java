@@ -8,6 +8,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ooxml.POIXMLDocumentPart;
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -41,7 +42,8 @@ public class OleTableParser {
         for (XmlObject oleObject : oleObjects) {
             XmlObject rIdAttribute = oleObject.selectAttribute("http://schemas.openxmlformats.org/officeDocument/2006/relationships", "id");
             if (rIdAttribute != null) {
-                String rId = rIdAttribute.newCursor().getTextValue();
+                String rId = rIdAttribute.newCursor()
+                        .getTextValue();
                 contentTables.addAll(parseOLEObject(run.getDocument(), rId));
             }
         }
@@ -50,9 +52,11 @@ public class OleTableParser {
 
     private static Collection<? extends ContentTable> parseOLEObject(XWPFDocument document, String rId) {
         POIXMLDocumentPart documentPart = document.getRelationById(rId);
-        if ("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet".equals(documentPart.getPackagePart().getContentType())) {
+        if ("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet".equals(documentPart.getPackagePart()
+                .getContentType())) {
             return parseXSSFWorkbook(documentPart.getPackagePart());
-        } else if ("application/vnd.ms-excel".equals(documentPart.getPackagePart().getContentType())) {
+        } else if ("application/vnd.ms-excel".equals(documentPart.getPackagePart()
+                .getContentType())) {
             return parseHSSFWorkbook(documentPart.getPackagePart());
         } else {
             return new ArrayList<>();
@@ -89,8 +93,9 @@ public class OleTableParser {
             for (Row row : sheet) {
                 ParsedTableRow contentRow = new ParsedTableRow();
                 for (Cell cell : row) {
-                    contentRow.add(cell.toString().trim());
-                    if (!cell.toString().isBlank()) {
+                    contentRow.add(getCellValue(cell));
+                    if (!cell.toString()
+                            .isBlank()) {
                         // @implements FR-05
                         contentRow.setFilled(true);
                     }
@@ -107,5 +112,25 @@ public class OleTableParser {
             }
         }
         return tables;
+    }
+
+    private static String getCellValue(Cell cell) {
+        if (cell.getCellType() == CellType.FORMULA) {
+            System.out.println("Formula is " + cell.getCellFormula());
+            switch (cell.getCachedFormulaResultType()) {
+                case CellType.NUMERIC:
+                    return String.valueOf(cell.getNumericCellValue());
+                case CellType.STRING:
+                    return String.valueOf(cell.getRichStringCellValue())
+                            .trim();
+                case CellType.BOOLEAN:
+                    return String.valueOf(cell.getBooleanCellValue());
+                default:
+                    return null;
+            }
+        } else {
+            return cell.toString()
+                    .trim();
+        }
     }
 }

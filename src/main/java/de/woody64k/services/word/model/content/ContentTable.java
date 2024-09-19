@@ -42,4 +42,19 @@ public class ContentTable implements IContent {
     public enum TABLE_TYPE {
         FLAT, OLE
     }
+
+    @Override
+    public String flattenToString() {
+        List<String> collection = new ArrayList<>();
+        for (ParsedTableRow row : table) {
+            for (Object cell : row) {
+                if (cell instanceof IContent) {
+                    collection.add(((IContent) cell).flattenToString());
+                } else {
+                    collection.add((String) cell);
+                }
+            }
+        }
+        return String.join("\n", collection);
+    }
 }

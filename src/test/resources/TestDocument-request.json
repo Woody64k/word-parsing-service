@@ -5,7 +5,7 @@
 			"resultName": "gericht"
 		},
 		{
-			"searchTerm": "Energie in kcal.",
+			"searchTerm": "Energie\n in kcal.",
 			"resultName": "kalorien"
 		},
 		{
@@ -45,7 +45,8 @@
 					"resultName": "buchName"
 				},
 				{
-					"searchTerm": "ISBN",
+					"searchTerm": "ISBNs?",
+					"useRegex": true,
 					"resultName": "buchNumber"
 				},
 				{

@@ -12,6 +12,7 @@ import de.woody64k.services.word.model.value.response.WordValues;
 import de.woody64k.services.word.service.analyser.ChapterAnalyser;
 import de.woody64k.services.word.service.analyser.DefaultValueSetter;
 import de.woody64k.services.word.service.analyser.DouplepointValueAnalyser;
+import de.woody64k.services.word.service.analyser.FullPlaintextAnalyser;
 import de.woody64k.services.word.service.analyser.HeadingColumnAnalyser;
 import de.woody64k.services.word.service.analyser.HeadingRowAnalyser;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +33,11 @@ public class WordAnalyser {
     private WordValues parseFlatValues(WordContent parsedData, Collection<SearchRequirement> searchRequ) {
         WordValues result = new WordValues();
         for (SearchRequirement condition : searchRequ) {
-            result.integrate(HeadingColumnAnalyser.analyse(parsedData, condition));
             result.integrate(DouplepointValueAnalyser.analyse(parsedData, condition));
+            result.integrate(HeadingColumnAnalyser.analyse(parsedData, condition));
             result.integrate(ChapterAnalyser.analyse(parsedData, condition));
             result.integrate(DefaultValueSetter.setDefaultValue(result.getData(), condition));
+            result.integrate(FullPlaintextAnalyser.analyse(parsedData, condition));
         }
         return result;
     }

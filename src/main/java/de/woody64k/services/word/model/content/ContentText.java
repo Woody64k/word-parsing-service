@@ -16,4 +16,9 @@ public class ContentText implements IContent {
     public ContentCategory getContentCategory() {
         return ContentCategory.TEXT;
     }
+
+    @Override
+    public String flattenToString() {
+        return text;
+    }
 }

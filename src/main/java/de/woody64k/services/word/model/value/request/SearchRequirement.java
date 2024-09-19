@@ -17,29 +17,38 @@ import lombok.Setter;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SearchRequirement extends ValueRequirements {
-    String searchTerm;
-    boolean useRegex;
-    String resultName;
-    String defaultValue;
-    ValueTransformRequirement transform;
+    private String searchTerm;
+    private boolean useRegex;
+    private String readAllTill;
+    private String resultName;
+    private String defaultValue;
+    private ValueTransformRequirement transform;
 
     @JsonIgnore
     @Getter(value = AccessLevel.NONE)
     @Setter(value = AccessLevel.NONE)
-    Pattern regexPattern;
+    private Pattern regexPattern;
 
     public Pattern getRegexPattern() {
         if (regexPattern == null) {
-            if (useRegex) {
-                regexPattern = Pattern.compile(getSearchTerm(), Pattern.CASE_INSENSITIVE);
-            } else {
-                List<String> parts = Arrays.asList(getSearchTerm().split("\\s+"));
-                String regex = parts.stream()
-                        .map(p -> Pattern.quote(p))
-                        .collect(Collectors.joining("\\s+"));
-                regexPattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-            }
+            regexPattern = buildRegex(searchTerm);
         }
         return regexPattern;
+    }
+
+    public Pattern getRegexTill() {
+        return buildRegex(readAllTill);
+    }
+
+    public Pattern buildRegex(String value) {
+        if (useRegex) {
+            return Pattern.compile(value, Pattern.CASE_INSENSITIVE);
+        } else {
+            List<String> parts = Arrays.asList(value.split("\\s+"));
+            String regex = parts.stream()
+                    .map(p -> Pattern.quote(p))
+                    .collect(Collectors.joining("\\s+"));
+            return Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        }
     }
 }

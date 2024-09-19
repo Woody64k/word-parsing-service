@@ -20,6 +20,9 @@ public class WordContent implements IContent {
     private Stack<ContentBlock> chapterStack = new Stack<>();
     private ArrayList<IContent> content = new ArrayList<>();
 
+    @JsonIgnore
+    private String flatString;
+
     @Override
     public ContentCategory getContentCategory() {
         return ContentCategory.DOCUMENT;
@@ -86,21 +89,16 @@ public class WordContent implements IContent {
         return results;
     }
 
+    @Override
     public String flattenToString() {
-        if (chapterStack.isEmpty()) {
-            for (IContent element : getContent()) {
-                if (!element.getContentCategory()
-                        .equals(ContentCategory.TEXT)) {
-                    return null;
-                }
-            }
+        if (flatString == null) {
             List<String> paragraphs = getContent().stream()
-                    .map(x -> ((ContentText) x).getText()
+                    .map(x -> x.flattenToString()
                             .trim())
                     .collect(Collectors.toList());
-            return String.join("\n", paragraphs);
+            flatString = String.join("\n", paragraphs);
         }
-        return null;
+        return flatString;
     }
 
     @JsonIgnore

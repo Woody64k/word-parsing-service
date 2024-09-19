@@ -31,12 +31,18 @@ public class ContentBlock extends WordContent {
     public List<IContent> getAllByCathegory(ContentCategory category) {
         List<IContent> results = new ArrayList<>();
         for (IContent contentBlock : getContent()) {
-            if (contentBlock.getContentCategory().equals(category)) {
+            if (contentBlock.getContentCategory()
+                    .equals(category)) {
                 results.add(contentBlock);
             }
             results.addAll(contentBlock.getAllByCathegory(category));
         }
         return results;
+    }
+
+    @Override
+    public String flattenToString() {
+        return String.format("%s\n%s", heading, super.flattenToString());
     }
 
     public enum TABLE_TYPE {

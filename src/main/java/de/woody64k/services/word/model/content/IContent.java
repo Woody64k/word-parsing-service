@@ -10,6 +10,8 @@ public interface IContent {
         return new ArrayList<>();
     }
 
+    public String flattenToString();
+
     public static enum ContentCategory {
         BLOCK, TEXT, TABLE, DOCUMENT
     }

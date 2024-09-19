@@ -18,9 +18,8 @@ public class ParsedTableRow extends ArrayList<Object> {
 
     public void add(WordContent content) {
         // FR-10: unpack documents to simple string if possible.
-        String flatContent = content.flattenToString();
-        if (flatContent != null) {
-            super.add(flatContent);
+        if (content.isOnlyText()) {
+            super.add(content.flattenToString());
         } else {
             super.add(content);
         }

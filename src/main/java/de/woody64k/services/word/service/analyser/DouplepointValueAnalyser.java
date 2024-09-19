@@ -39,9 +39,9 @@ public class DouplepointValueAnalyser {
     public static GenericObject scanCell(String cell, SearchRequirement searchRequirement) {
         List<Object> result = new ArrayList<>();
         for (Matcher match = MatchHelper.findWithRegex(cell, searchRequirement); match.find();) {
-            Object foundValues = ValueTransformer.transform(getFromText(cell, match), searchRequirement.getTransform());
-            if (foundValues != null) {
-                result.add(foundValues);
+            String[] foundValues = getFromText(cell, match);
+            for (String foundValue : foundValues) {
+                result.add(ValueTransformer.transform(foundValue, searchRequirement.getTransform()));
             }
         }
         if (result.isEmpty()) {
@@ -51,7 +51,7 @@ public class DouplepointValueAnalyser {
         }
     }
 
-    public static String getFromText(String text, Matcher match) {
+    public static String[] getFromText(String text, Matcher match) {
         String other = text.substring(match.end())
                 .trim();
         String foundString = match.group();
@@ -65,13 +65,14 @@ public class DouplepointValueAnalyser {
             String[] lines = other.split("\n");
             for (int i = 0; i < lines.length; i++) {
                 if (lines[i].contains(":")) {
-                    return String.join("; ", Arrays.copyOfRange(lines, 0, i - 1));
+                    // minumum the first line
+                    return Arrays.copyOfRange(lines, 0, (i < 1) ? 1 : i);
                 }
             }
 
             // return all if no : occurs
-            return String.join("; ", lines);
+            return lines;
         }
-        return null;
+        return new String[0];
     }
 }

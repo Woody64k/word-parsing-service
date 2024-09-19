@@ -89,6 +89,16 @@ public class WordContent implements IContent {
         return results;
     }
 
+    public boolean isOnlyText() {
+        for (IContent element : getContent()) {
+            if (!element.getContentCategory()
+                    .equals(ContentCategory.TEXT)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public String flattenToString() {
         if (flatString == null) {

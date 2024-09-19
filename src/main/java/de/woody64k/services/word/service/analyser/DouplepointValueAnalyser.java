@@ -1,6 +1,7 @@
 package de.woody64k.services.word.service.analyser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -55,10 +56,21 @@ public class DouplepointValueAnalyser {
                 .trim();
         String foundString = match.group();
         if (foundString.endsWith(":") || other.startsWith(":")) {
-            String result = other.contains("\n") ? other.substring(0, other.indexOf("\n")) : other;
-            if (!result.isBlank()) {
-                return result;
+            if (other.startsWith(":")) {
+                // remove :
+                other = other.substring(1);
             }
+
+            // collect next lines if they doesn't contain:
+            String[] lines = other.split("\n");
+            for (int i = 0; i < lines.length; i++) {
+                if (lines[i].contains(":")) {
+                    return String.join("; ", Arrays.copyOfRange(lines, 0, i - 1));
+                }
+            }
+
+            // return all if no : occurs
+            return String.join("; ", lines);
         }
         return null;
     }

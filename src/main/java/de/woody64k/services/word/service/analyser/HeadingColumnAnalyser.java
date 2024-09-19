@@ -6,6 +6,7 @@ import de.woody64k.services.word.model.content.elements.ParsedTableRow;
 import de.woody64k.services.word.model.value.request.SearchRequirement;
 import de.woody64k.services.word.model.value.response.GenericObject;
 import de.woody64k.services.word.service.analyser.transform.ValueTransformer;
+import de.woody64k.services.word.service.analyser.util.MatchHelper;
 
 /**
  * Parses Tables with a heading column.
@@ -45,7 +46,7 @@ public class HeadingColumnAnalyser {
                 value = (String) cell;
                 // first column matches
                 if (firstColumn) {
-                    if (value.equalsIgnoreCase(searchRequirement.getSearchTerm())) {
+                    if (MatchHelper.matches(value, searchRequirement)) {
                         // match
                         firstColumn = false;
                     } else {

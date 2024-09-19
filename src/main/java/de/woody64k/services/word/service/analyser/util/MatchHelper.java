@@ -10,7 +10,7 @@ public class MatchHelper {
         if (text == null) {
             return false;
         } else {
-            return text.equalsIgnoreCase(requirement.getSearchTerm());
+            return matchWitRegex(text, requirement);
         }
     }
 
@@ -18,17 +18,15 @@ public class MatchHelper {
         if (text == null) {
             return false;
         } else {
-            return text.matches(requirement.getSearchTerm());
+            return requirement.getRegexPattern()
+                    .matcher(text)
+                    .matches();
         }
     }
 
-    public static int findWithRegex(String text, SearchRequirement requirement) {
+    public static Matcher findWithRegex(String text, SearchRequirement requirement) {
         Pattern pattern = requirement.getRegexPattern();
         Matcher matcher = pattern.matcher(text);
-        if (matcher.find()) {
-            return matcher.start();
-        } else {
-            return -1;
-        }
+        return matcher;
     }
 }

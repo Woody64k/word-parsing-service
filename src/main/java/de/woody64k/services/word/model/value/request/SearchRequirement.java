@@ -1,6 +1,9 @@
 package de.woody64k.services.word.model.value.request;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,11 +31,13 @@ public class SearchRequirement extends ValueRequirements {
     public Pattern getRegexPattern() {
         if (regexPattern == null) {
             if (useRegex) {
-                regexPattern = Pattern.compile(getSearchTerm());
+                regexPattern = Pattern.compile(getSearchTerm(), Pattern.CASE_INSENSITIVE);
             } else {
-                String term = Pattern.quote(getSearchTerm());
-                term = term.replaceAll("\\w*", "\\w*");
-                regexPattern = Pattern.compile(term);
+                List<String> parts = Arrays.asList(getSearchTerm().split("\\s+"));
+                String regex = parts.stream()
+                        .map(p -> Pattern.quote(p))
+                        .collect(Collectors.joining("\\s+"));
+                regexPattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
             }
         }
         return regexPattern;

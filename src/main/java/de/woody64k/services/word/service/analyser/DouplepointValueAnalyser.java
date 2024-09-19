@@ -2,6 +2,7 @@ package de.woody64k.services.word.service.analyser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 
 import de.woody64k.services.word.model.content.ContentTable;
 import de.woody64k.services.word.model.content.WordContent;
@@ -9,6 +10,7 @@ import de.woody64k.services.word.model.content.elements.ParsedTableRow;
 import de.woody64k.services.word.model.value.request.SearchRequirement;
 import de.woody64k.services.word.model.value.response.GenericObject;
 import de.woody64k.services.word.service.analyser.transform.ValueTransformer;
+import de.woody64k.services.word.service.analyser.util.MatchHelper;
 
 public class DouplepointValueAnalyser {
 
@@ -35,9 +37,8 @@ public class DouplepointValueAnalyser {
 
     public static GenericObject scanCell(String cell, SearchRequirement searchRequirement) {
         List<Object> result = new ArrayList<>();
-        String condition = searchRequirement.getSearchTerm();
-        for (String text = cell; text.contains(condition); text = text.substring(text.indexOf(condition) + condition.length())) {
-            Object foundValues = ValueTransformer.transform(findInText(text, condition), searchRequirement.getTransform());
+        for (Matcher match = MatchHelper.findWithRegex(cell, searchRequirement); match.find();) {
+            Object foundValues = ValueTransformer.transform(getFromText(cell, match), searchRequirement.getTransform());
             if (foundValues != null) {
                 result.add(foundValues);
             }
@@ -49,13 +50,14 @@ public class DouplepointValueAnalyser {
         }
     }
 
-    public static String findInText(String text, String condition) {
-        if (text.contains(condition)) {
-            String other = text.substring(text.indexOf(condition) + condition.length());
-            String otherTillEol = other.contains("\n") ? other.substring(0, other.indexOf("\n")) : other;
-            if (otherTillEol.contains(":")) {
-                return otherTillEol.substring(otherTillEol.indexOf(":") + 1)
-                        .trim();
+    public static String getFromText(String text, Matcher match) {
+        String other = text.substring(match.end())
+                .trim();
+        String foundString = match.group();
+        if (foundString.endsWith(":") || other.startsWith(":")) {
+            String result = other.contains("\n") ? other.substring(0, other.indexOf("\n")) : other;
+            if (!result.isBlank()) {
+                return result;
             }
         }
         return null;

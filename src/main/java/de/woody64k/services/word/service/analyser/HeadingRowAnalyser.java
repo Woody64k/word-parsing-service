@@ -76,11 +76,20 @@ public class HeadingRowAnalyser {
     private static Map<String, Integer> scannHeader(ParsedTableRow row, ListRequirement listRequirement) {
         Map<String, Integer> tableMap = new HashMap<>();
         for (SearchRequirement requirement : listRequirement.getValues()) {
-            for (int i = 0; i < row.size(); i++) {
-                if (row.get(i) instanceof String && MatchHelper.matches((String) row.get(i), requirement))
-                    tableMap.put(requirement.getResultName(), i);
+            int pos = findInRow(row, tableMap, requirement);
+            if (pos >= 0) {
+                tableMap.put(requirement.getResultName(), pos);
             }
         }
         return tableMap;
+    }
+
+    public static int findInRow(ParsedTableRow row, Map<String, Integer> tableMap, SearchRequirement requirement) {
+        for (int i = 0; i < row.size(); i++) {
+            if (row.get(i) instanceof String && MatchHelper.matches((String) row.get(i), requirement))
+                return i;
+        }
+        // not found
+        return -1;
     }
 }

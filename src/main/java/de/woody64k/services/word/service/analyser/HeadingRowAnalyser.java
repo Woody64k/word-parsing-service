@@ -13,6 +13,7 @@ import de.woody64k.services.word.model.value.request.SearchRequirement;
 import de.woody64k.services.word.model.value.response.GenericObject;
 import de.woody64k.services.word.service.analyser.transform.ListTransformer;
 import de.woody64k.services.word.service.analyser.transform.ValueTransformer;
+import de.woody64k.services.word.service.analyser.util.MatchHelper;
 
 public class HeadingRowAnalyser {
 
@@ -76,7 +77,7 @@ public class HeadingRowAnalyser {
         Map<String, Integer> tableMap = new HashMap<>();
         for (SearchRequirement requirement : listRequirement.getValues()) {
             for (int i = 0; i < row.size(); i++) {
-                if (row.get(i) instanceof String && ((String) row.get(i)).equalsIgnoreCase(requirement.getSearchTerm()))
+                if (row.get(i) instanceof String && MatchHelper.matches((String) row.get(i), requirement))
                     tableMap.put(requirement.getResultName(), i);
             }
         }

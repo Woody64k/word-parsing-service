@@ -17,5 +17,6 @@ public class MergeTransform {
     public static class MergeObject {
         String resultName;
         List<String> values;
+        String[] orderBy;
     }
 }

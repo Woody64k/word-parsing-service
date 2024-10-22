@@ -1,12 +1,15 @@
 package de.woody64k.services.word.model.value.response;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.woody64k.services.word.service.analyser.transform.SortComperator;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -138,7 +141,8 @@ public class GenericObject extends LinkedHashMap<String, Object> {
             if (coll.size() == 0) {
                 return null;
             } else if (coll.size() == 1) {
-                return coll.iterator().next();
+                return coll.iterator()
+                        .next();
             } else {
                 return coll;
             }
@@ -165,6 +169,23 @@ public class GenericObject extends LinkedHashMap<String, Object> {
             put(key, values);
             return values;
         }
+    }
+
+    /**
+     * Sorts a list (fieldToSort) in GenObject based on the criteria
+     * 
+     * @param fieldToSort
+     * @param criteria
+     * @return
+     */
+    public GenericObject orderList(String fieldToSort, String[] criteria) {
+        Object dataToSort = get(fieldToSort);
+        if (dataToSort instanceof Collection) {
+            ArrayList<GenericObject> sortedData = new ArrayList<GenericObject>((Collection) dataToSort);
+            Collections.sort(sortedData, new SortComperator(criteria));
+            put(fieldToSort, sortedData);
+        }
+        return this;
     }
 
     public boolean equalsByKey(GenericObject mergedResult, List<String> mergeKey) {

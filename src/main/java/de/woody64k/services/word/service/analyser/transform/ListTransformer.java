@@ -2,6 +2,7 @@ package de.woody64k.services.word.service.analyser.transform;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -11,12 +12,16 @@ import de.woody64k.services.word.model.value.request.transform.ListTransformRequ
 import de.woody64k.services.word.model.value.request.transform.MergeTransform;
 import de.woody64k.services.word.model.value.request.transform.MergeTransform.MergeObject;
 import de.woody64k.services.word.model.value.response.GenericObject;
+import de.woody64k.services.word.util.Checker;
 
 public class ListTransformer {
     public static List<GenericObject> transform(List<GenericObject> values, ListTransformRequirement requ) {
         if (requ != null) {
             List<GenericObject> result = doFilter(values, requ.getFilter());
             result = doMerge(result, requ.getMerge());
+            if (Checker.isNotEmpty(requ.getOrderBy())) {
+                Collections.sort(result, new SortComperator(requ.getOrderBy()));
+            }
             return result;
         } else {
             return values;
@@ -27,7 +32,9 @@ public class ListTransformer {
         if (filter == null) {
             return objects;
         } else {
-            return objects.stream().filter(FilterPredicateHelper.getLambda(filter)).collect(Collectors.toList());
+            return objects.stream()
+                    .filter(FilterPredicateHelper.getLambda(filter))
+                    .collect(Collectors.toList());
         }
     }
 
@@ -55,7 +62,22 @@ public class ListTransformer {
                 }
             }
         }
+        orderMerge(mergedData, mergeTransform);
         return mergedData;
+    }
+
+    private static void orderMerge(List<GenericObject> mergedData, MergeTransform mergeTransform) {
+        for (MergeObject subList : mergeTransform.getObjects()) {
+            if (Checker.isNotEmpty(subList.getOrderBy())) {
+                for (GenericObject objectToSort : mergedData) {
+                    objectToSort.orderList(subList.getResultName(), subList.getOrderBy());
+                }
+            }
+        }
+    }
+
+    private static void orderMerge(List<GenericObject> genObj, String fieldToSort, String[] criteria) {
+
     }
 
     private static GenericObject tranformToListForm(GenericObject sliceOut) {

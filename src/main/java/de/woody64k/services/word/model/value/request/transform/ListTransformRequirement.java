@@ -6,4 +6,5 @@ import lombok.Data;
 public class ListTransformRequirement {
     MergeTransform merge;
     FilterTransform filter;
+    String[] orderBy;
 }

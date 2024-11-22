@@ -13,6 +13,6 @@ public interface IContent {
     public String flattenToString();
 
     public static enum ContentCategory {
-        BLOCK, TEXT, TABLE, DOCUMENT
+        TEXT, TABLE, DOCUMENT
     }
 }

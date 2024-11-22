@@ -3,7 +3,6 @@ package de.woody64k.services.document.model.content;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,8 +15,6 @@ import lombok.Data;
 public class DocumentContent implements IContent {
     @JsonIgnore
     private static final long serialVersionUID = 1L;
-    @JsonIgnore
-    private Stack<ContentBlock> chapterStack = new Stack<>();
     private ArrayList<IContent> content = new ArrayList<>();
 
     @JsonIgnore
@@ -33,39 +30,16 @@ public class DocumentContent implements IContent {
     }
 
     public void addTable(ContentTable table) {
-        getBlock().add(table);
+        add(table);
     }
 
     public void addTables(Collection<ContentTable> tables) {
-        getBlock().getContent()
-                .addAll(tables);
+        getContent().addAll(tables);
     }
 
     public void addText(String text) {
         if (text != null && !text.isBlank()) {
-            getBlock().add(ContentText.create(text));
-        }
-    }
-
-    public void addBlock(String text, Integer headingLevel) {
-        ContentBlock block = ContentBlock.create(text, headingLevel);
-        for (; !chapterStack.isEmpty() && chapterStack.lastElement()
-                .getLevel() >= block.getLevel(); chapterStack.removeLast())
-            ;
-        if (chapterStack.isEmpty()) {
-            content.add(block);
-        } else {
-            chapterStack.lastElement()
-                    .add(block);
-        }
-        chapterStack.push(block);
-    }
-
-    private DocumentContent getBlock() {
-        if (chapterStack.isEmpty()) {
-            return this;
-        } else {
-            return chapterStack.lastElement();
+            add(ContentText.create(text));
         }
     }
 
@@ -115,6 +89,6 @@ public class DocumentContent implements IContent {
 
     @JsonIgnore
     public boolean isEmpty() {
-        return chapterStack.isEmpty() && content.isEmpty();
+        return content.isEmpty();
     }
 }

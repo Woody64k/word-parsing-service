@@ -43,13 +43,7 @@ public class BodyElementParser {
                             docContent.addTables(OleTableParser.parseOLEObjects(run));
                         }
                     } else {
-                        NumberingInformation headingLevel = getHeadingLevel(paragraph);
-                        if (headingLevel == null || (headingNumId != null && !headingNumId.equals(headingLevel.getId()))) {
-                            docContent.addText(text);
-                        } else {
-                            headingNumId = headingLevel.getId();
-                            docContent.addBlock(text, headingLevel.getLevel());
-                        }
+                        docContent.addText(text);
                     }
                     break;
                 }
@@ -61,29 +55,5 @@ public class BodyElementParser {
             }
         }
         return docContent;
-    }
-
-    private NumberingInformation getHeadingLevel(XWPFParagraph paragraph) {
-        if (paragraph.getNumID() != null) {
-            int id = paragraph.getNumID()
-                    .intValue();
-            int lvl = paragraph.getNumIlvl()
-                    .intValue();
-            return NumberingInformation.create(id, ++lvl);
-        }
-        return null; // Means no heading
-    }
-
-    @Data
-    public static class NumberingInformation {
-        int level;
-        int id;
-
-        public static NumberingInformation create(int id, int level) {
-            NumberingInformation num = new NumberingInformation();
-            num.setId(id);
-            num.setLevel(level);
-            return num;
-        }
     }
 }

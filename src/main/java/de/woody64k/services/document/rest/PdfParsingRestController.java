@@ -14,6 +14,7 @@ import de.woody64k.services.document.model.content.DocumentContent;
 import de.woody64k.services.document.model.value.request.DocumentValueRequirement;
 import de.woody64k.services.document.model.value.request.validate.RequestValidator;
 import de.woody64k.services.document.model.value.response.WordValues;
+import de.woody64k.services.document.pdf.service.PdfParser;
 import de.woody64k.services.document.service.DocumentAnalyser;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Encoding;
@@ -23,8 +24,8 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 @RequestMapping("/pdf")
 public class PdfParsingRestController {
 
-//    @Autowired
-//    private PdfParser parser;
+    @Autowired
+    private PdfParser parser;
 
     @Autowired
     private DocumentAnalyser analyser;
@@ -33,7 +34,7 @@ public class PdfParsingRestController {
     @PostMapping(value = "/content", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public DocumentContent parseWordContent(@RequestParam("file") MultipartFile uploadFile) {
         try {
-            return null; // parser.parseConent(uploadFile);
+            return parser.parseConent(uploadFile);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

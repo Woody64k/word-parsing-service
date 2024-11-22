@@ -6,7 +6,7 @@ import java.util.List;
 public interface IContent {
     public ContentCategory getContentCategory();
 
-    public default List<IContent> getAllByCathegory(ContentCategory category) {
+    public default List<IContent> getAllByCategory(ContentCategory category) {
         return new ArrayList<>();
     }
 

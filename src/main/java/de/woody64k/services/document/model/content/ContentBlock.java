@@ -28,14 +28,14 @@ public class ContentBlock extends DocumentContent {
     }
 
     @Override
-    public List<IContent> getAllByCathegory(ContentCategory category) {
+    public List<IContent> getAllByCategory(ContentCategory category) {
         List<IContent> results = new ArrayList<>();
         for (IContent contentBlock : getContent()) {
             if (contentBlock.getContentCategory()
                     .equals(category)) {
                 results.add(contentBlock);
             }
-            results.addAll(contentBlock.getAllByCathegory(category));
+            results.addAll(contentBlock.getAllByCategory(category));
         }
         return results;
     }

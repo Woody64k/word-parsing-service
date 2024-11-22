@@ -26,13 +26,13 @@ public class ContentTable implements IContent {
     }
 
     @Override
-    public List<IContent> getAllByCathegory(ContentCategory category) {
+    public List<IContent> getAllByCategory(ContentCategory category) {
         List<IContent> collection = new ArrayList<>();
         for (ParsedTableRow row : table) {
             for (Object cell : row) {
                 if (cell instanceof DocumentContent) {
                     DocumentContent embeddedDoc = (DocumentContent) cell;
-                    collection.addAll(embeddedDoc.getAllByCathegory(category));
+                    collection.addAll(embeddedDoc.getAllByCategory(category));
                 }
             }
         }

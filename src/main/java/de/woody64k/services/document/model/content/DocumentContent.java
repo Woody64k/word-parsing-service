@@ -42,7 +42,9 @@ public class DocumentContent implements IContent {
     }
 
     public void addText(String text) {
-        getBlock().add(ContentText.create(text));
+        if (text != null && !text.isBlank()) {
+            getBlock().add(ContentText.create(text));
+        }
     }
 
     public void addBlock(String text, Integer headingLevel) {
@@ -69,7 +71,7 @@ public class DocumentContent implements IContent {
 
     @JsonIgnore
     public List<ContentTable> getTables() {
-        List<IContent> content = getAllByCathegory(ContentCategory.TABLE);
+        List<IContent> content = getAllByCategory(ContentCategory.TABLE);
         return content.stream()
                 .map(block -> (ContentTable) block)
                 .collect(Collectors.toList());
@@ -77,14 +79,14 @@ public class DocumentContent implements IContent {
     // END of Legacy Stuff
 
     @Override
-    public List<IContent> getAllByCathegory(ContentCategory category) {
+    public List<IContent> getAllByCategory(ContentCategory category) {
         List<IContent> results = new ArrayList<>();
         for (IContent content : getContent()) {
             if (content.getContentCategory()
                     .equals(category)) {
                 results.add(content);
             }
-            results.addAll(content.getAllByCathegory(category));
+            results.addAll(content.getAllByCategory(category));
         }
         return results;
     }

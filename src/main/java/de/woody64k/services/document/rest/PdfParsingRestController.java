@@ -34,7 +34,7 @@ public class PdfParsingRestController {
 
     @CrossOrigin
     @PostMapping(value = "/content", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public DocumentContent parseWordContent(@RequestParam List<String> tableHeaderIndicator, @RequestParam("file") MultipartFile uploadFile) {
+    public DocumentContent parseContent(@RequestParam List<String> tableHeaderIndicator, @RequestParam("file") MultipartFile uploadFile) {
         try {
             return parser.parseConent(tableHeaderIndicator, uploadFile);
         } catch (Exception e) {
@@ -45,10 +45,10 @@ public class PdfParsingRestController {
     @CrossOrigin
     @PostMapping(value = "/content/values", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @RequestBody(content = @Content(encoding = @Encoding(name = "request", contentType = "application/json")))
-    public WordValues parseValuesFromWord(@RequestParam List<String> tableHeaderIndicator, @RequestPart DocumentValueRequirement request, @RequestPart("file") MultipartFile uploadFile) {
+    public WordValues parseValues(@RequestParam List<String> tableHeaderIndicator, @RequestPart DocumentValueRequirement request, @RequestPart("file") MultipartFile uploadFile) {
         try {
             RequestValidator.validate(request);
-            DocumentContent parsedData = parseWordContent(tableHeaderIndicator, uploadFile);
+            DocumentContent parsedData = parseContent(tableHeaderIndicator, uploadFile);
             return analyser.getValues(parsedData, request);
         } catch (Exception e) {
             throw new RuntimeException(e);

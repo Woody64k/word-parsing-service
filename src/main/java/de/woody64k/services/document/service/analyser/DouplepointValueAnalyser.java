@@ -7,6 +7,8 @@ import java.util.regex.Matcher;
 
 import de.woody64k.services.document.model.content.ContentTable;
 import de.woody64k.services.document.model.content.DocumentContent;
+import de.woody64k.services.document.model.content.IContent;
+import de.woody64k.services.document.model.content.IContent.ContentCategory;
 import de.woody64k.services.document.model.content.elements.ParsedTableRow;
 import de.woody64k.services.document.model.value.request.SearchRequirement;
 import de.woody64k.services.document.model.value.response.GenericObject;
@@ -33,6 +35,10 @@ public class DouplepointValueAnalyser {
                 }
             }
         }
+        for (IContent textBlock : parsedData.getAllByCategory(ContentCategory.TEXT)) {
+            GenericObject foundValues = scanCell(textBlock.flattenToString(), searchRequirement);
+            result.putAllAndFlatten(foundValues, true);
+        }
         return result;
     }
 
@@ -41,7 +47,7 @@ public class DouplepointValueAnalyser {
         for (Matcher match = MatchHelper.findWithRegex(cell, searchRequirement); match.find();) {
             String[] foundValues = getFromText(cell, match);
             for (String foundValue : foundValues) {
-                result.add(ValueTransformer.transform(foundValue, searchRequirement.getTransform()));
+                result.add(ValueTransformer.transform(foundValue.trim(), searchRequirement.getTransform()));
             }
         }
         if (result.isEmpty()) {

@@ -83,6 +83,25 @@ When running in docker while connected to vpn, *localhost* may not work. (theref
 | BR-09 [[BR-09]] 
 | Parse text below Heading
 | As User I want to parse the text content below a Heading.
+
+| BR-10 [[BR-10]] 
+| An analyse PDF
+| Analog to Word documents, a Parsing of PDF documents should also be possible, because sometimes, our customers submit them in pdf.
+|===
+
+=== Constraints
+[%header, cols="1,1a,2,4a"]
+|===
+| ID    | affected BR | name                 | desciption
+| C-01 [[C-01]]
+| * <<BR-10,BR-10>>       
+| Page oriented Layout of PDF.
+| PDF documents are printing and layouting oriended insted of content oriented. This Means a Table separated into two pages will result in two independend tables.
+
+| C-02 [[C-02]]
+| * <<BR-10,BR-10>>       
+| Artifacts from pdf
+| PDF Documents may contain layouting artifacts such as empty lines, empty rows or columns.
 |===
 
 === Functional Requirements
@@ -208,5 +227,29 @@ If possible leave the cells as string if they just contain text.
 | * <<BR-09, BR-09>>
 | Parse full chapter below Heading
 | To Read a chapter we will combin all headings of a block and all texts separated by a newline. We will ignore tables while reading a chapter.
+
+| FR-13 [[FR-13]]
+| * <<BR-10, BR-10>>
+* <<C-02, C-02>>
+| Cleanup artifacts in pdf
+| The Service need to cleanup the following artifacts:
+
+. word separation at the end of the line. '-' followed by a linebreak (make shure /r /n and both will be covered)
+-> *merge* with line afterwards
+. empty lines for alignment and formatting
+-> *remove* them
+. empty table columns
+-> *remove* them
+. empty table lines
+-> *remove* them
+
+| FR-14 [[FR-14]]
+| * <<BR-10, BR-10>>
+* <<C-01, C-01>>
+| Merge Tables which are splited by the page break.
+| The Service need to merge the Tables if there are hints, that the second table is part of the first one.
+
+* We pass expected headings to the service. Tables without them will be merges with the last one before
+* We check if the number of columns math between the table without the headings and the table before (prepare by get rid of empty columns <<FR-13, FR-13>>)
 
 |===

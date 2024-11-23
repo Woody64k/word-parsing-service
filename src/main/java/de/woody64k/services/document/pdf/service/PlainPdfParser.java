@@ -55,6 +55,10 @@ public class PlainPdfParser {
                             contentTable.add(contentRow);
                             System.out.println();
                         }
+                        contentTable.getTable()
+                                .removeEmptyColumns();
+                        contentTable.getTable()
+                                .removeEmptyRows();
                         content.addTable(contentTable);
                         textsOfPage = findTextAfterTable(textsOfPage, table);
                     }

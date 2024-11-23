@@ -27,7 +27,6 @@ public class ParsedTableRow extends ArrayList<Object> {
     }
 
     public boolean isBlank() {
-        // FR-13: Cleanup artifacts in pdf
         for (Object cell : this) {
             if (Checker.isNotEmpty(cell)) {
                 // Something in row

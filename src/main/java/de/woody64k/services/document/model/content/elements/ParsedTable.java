@@ -18,8 +18,7 @@ public class ParsedTable extends ArrayList<ParsedTableRow> {
     }
 
     /**
-     * Deletes all columns, which are compleatly empty. FR-13: Cleanup artifacts in
-     * pdf
+     * Deletes all columns, which are compleatly empty.
      * 
      * @return the indexed of the keeped ones
      */
@@ -36,8 +35,7 @@ public class ParsedTable extends ArrayList<ParsedTableRow> {
     }
 
     /**
-     * Deletes all columns, which are compleatly empty.FR-13: Cleanup artifacts in
-     * pdf
+     * Deletes all columns, which are compleatly empty.
      * 
      * @return the indexed of the keept ones
      */
@@ -64,5 +62,19 @@ public class ParsedTable extends ArrayList<ParsedTableRow> {
             }
         }
         return columnsToKeep;
+    }
+
+    public int maxWith() {
+        int max = 0;
+        for (ParsedTableRow row : this) {
+            if (max < row.size()) {
+                max = row.size();
+            }
+        }
+        return max;
+    }
+
+    public void append(ParsedTable table) {
+        addAll(table);
     }
 }

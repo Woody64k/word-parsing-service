@@ -23,53 +23,77 @@ import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 
 public class PlainPdfParser {
 
-    public static DocumentContent collectDocumentContent(MultipartFile uploadFile) {
+    public static List<DocumentContent> collectDocumentContent(MultipartFile uploadFile) {
         try (PDDocument pdf = PDDocument.load(new ByteArrayInputStream(uploadFile.getBytes()))) {
-            SpreadsheetExtractionAlgorithm sea = new SpreadsheetExtractionAlgorithm();
             PageIterator pi = new ObjectExtractor(pdf).extract();
-            DocumentContent content = new DocumentContent();
+            List<DocumentContent> contentByPages = new ArrayList<>();
+            DocumentContent lastPageContent;
             pi.forEachRemaining(page -> {
-                List<Table> tableList = sea.extract(page);
-                List<RectangularTextContainer> textsOfPage = getPageTexts(page);
-
-                ContentTable lastTable;
-                if (tableList.isEmpty()) {
-                    content.addText(combineText(textsOfPage));
-                } else {
-                    for (Table table : tableList) {
-                        // Collect Text before Table
-                        List<RectangularTextContainer> textBeforeTable = findTextBeforeTable(textsOfPage, table);
-                        content.addText(combineText(textBeforeTable));
-                        textsOfPage.removeAll(textBeforeTable);
-
-                        ContentTable contentTable = new ContentTable();
-
-                        List<List<RectangularTextContainer>> rows = table.getRows();
-                        // iterate over the rows of the table
-                        for (List<RectangularTextContainer> cells : rows) {
-                            ParsedTableRow contentRow = new ParsedTableRow();
-                            // print all column-cells of the row plus linefeed
-                            for (RectangularTextContainer cellContent : cells) {
-                                contentRow.add(getOneLineText(cellContent));
-                            }
-                            contentTable.add(contentRow);
-                            System.out.println();
-                        }
-                        contentTable.getTable()
-                                .removeEmptyColumns();
-                        contentTable.getTable()
-                                .removeEmptyRows();
-                        content.addTable(contentTable);
-                        textsOfPage = findTextAfterTable(textsOfPage, table);
-                    }
-                    // Collect Text After Tables
-                    content.addText(combineText(textsOfPage));
-                }
+                contentByPages.add(readPage(page));
             });
-            return content;
+            return contentByPages;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static DocumentContent readPage(Page page) {
+        DocumentContent content = new DocumentContent();
+        SpreadsheetExtractionAlgorithm sea = new SpreadsheetExtractionAlgorithm();
+        List<Table> tableList = sea.extract(page);
+        List<RectangularTextContainer> textsOfPage = getPageTexts(page);
+
+        if (tableList.isEmpty()) {
+            content.addText(combineText(textsOfPage));
+        } else {
+            for (Table table : tableList) {
+                // Collect Text before Table
+                List<RectangularTextContainer> textBeforeTable = findTextBeforeTable(textsOfPage, table);
+                content.addText(combineText(textBeforeTable));
+                textsOfPage.removeAll(textBeforeTable);
+
+                ContentTable contentTable = readTable(table);
+
+                cleanupTable(contentTable);
+                content.addTable(contentTable);
+                textsOfPage = findTextAfterTable(textsOfPage, table);
+            }
+            // Collect Text After Tables
+            content.addText(combineText(textsOfPage));
+        }
+        return content;
+    }
+
+    public static ContentTable readTable(Table table) {
+        ContentTable contentTable = new ContentTable();
+
+        List<List<RectangularTextContainer>> rows = table.getRows();
+        // iterate over the rows of the table
+        for (List<RectangularTextContainer> cells : rows) {
+            ParsedTableRow contentRow = new ParsedTableRow();
+            // print all column-cells of the row plus linefeed
+            for (RectangularTextContainer cellContent : cells) {
+                contentRow.add(getOneLineText(cellContent));
+            }
+            contentTable.add(contentRow);
+            System.out.println();
+        }
+        return cleanupTable(contentTable);
+    }
+
+    /**
+     * Cleans empty rows and lines from the table.
+     * 
+     * @implements FR-13: Cleanup artifacts in pdf
+     * @param contentTable
+     * @return
+     */
+    public static ContentTable cleanupTable(ContentTable contentTable) {
+        contentTable.getTable()
+                .removeEmptyColumns();
+        contentTable.getTable()
+                .removeEmptyRows();
+        return contentTable;
     }
 
     private static List<RectangularTextContainer> findTextBeforeTable(List<RectangularTextContainer> textsOfPage, Table table) {

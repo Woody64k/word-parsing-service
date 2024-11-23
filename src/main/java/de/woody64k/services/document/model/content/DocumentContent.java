@@ -37,9 +37,13 @@ public class DocumentContent implements IContent {
         getContent().addAll(tables);
     }
 
-    public void addText(String text) {
+    public ContentText addText(String text) {
         if (text != null && !text.isBlank()) {
-            add(ContentText.create(text));
+            ContentText textContent = ContentText.create(text);
+            add(textContent);
+            return textContent;
+        } else {
+            return null;
         }
     }
 
@@ -90,5 +94,21 @@ public class DocumentContent implements IContent {
     @JsonIgnore
     public boolean isEmpty() {
         return content.isEmpty();
+    }
+
+    public void merge(DocumentContent secondDoc) {
+        content.addAll(secondDoc.getContent());
+    }
+
+    public void mergeAll(Collection<DocumentContent> docs) {
+        for (DocumentContent doc : docs) {
+            merge(doc);
+        }
+    }
+
+    public static DocumentContent from(List<DocumentContent> contentByPage) {
+        DocumentContent content = new DocumentContent();
+        content.mergeAll(contentByPage);
+        return content;
     }
 }

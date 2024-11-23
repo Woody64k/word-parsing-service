@@ -21,4 +21,9 @@ public class ContentText implements IContent {
     public String flattenToString() {
         return text;
     }
+
+    public ContentText appendText(String newText) {
+        text = text.concat(newText);
+        return this;
+    }
 }

@@ -1,6 +1,7 @@
 package de.woody64k.services.document.model.content.elements;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.woody64k.services.document.model.content.DocumentContent;
 import de.woody64k.services.document.util.Checker;
@@ -35,5 +36,19 @@ public class ParsedTableRow extends ArrayList<Object> {
         }
         // full row only contains blank
         return true;
+    }
+
+    public List<Integer> filledCells() {
+        List<Integer> filledCells = new ArrayList<>();
+        for (int i = 0; i < this.size(); i++) {
+            if (Checker.isNotEmpty(this.get(i))) {
+                filledCells.add(i);
+            }
+        }
+        return filledCells;
+    }
+
+    public void appendTo(int i, Object text) {
+        set(i, String.format("%s %s", get(i), text));
     }
 }

@@ -11,11 +11,14 @@ import de.woody64k.services.document.model.content.ContentText;
 import de.woody64k.services.document.model.content.DocumentContent;
 import de.woody64k.services.document.model.content.IContent;
 import de.woody64k.services.document.model.content.IContent.ContentCategory;
+import de.woody64k.services.document.model.content.elements.ParsedTableRow;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class PdfParser {
+    private final static int PERCENTAGE_OF_FILLED_ROW_BREAK = 50;
+
     public DocumentContent parseConent(List<String> tableHeaderIndicator, MultipartFile uploadFile) {
         List<DocumentContent> contentByPage = PlainPdfParser.collectDocumentContent(uploadFile);
 
@@ -23,8 +26,9 @@ public class PdfParser {
                 .filter(table -> !table.isEmpty())
                 .collect(Collectors.toList());
 
-        mergeTextsAcrossPages(contentByPage);
         mergeTablesAcrossPages(contentByPage, tableHeaderIndicator);
+        mergeTextsAcrossPages(contentByPage);
+
         DocumentContent content = DocumentContent.from(contentByPage);
         return content;
     }
@@ -65,11 +69,36 @@ public class PdfParser {
                         .maxWith() == lastTableOfLastPage.getTable()
                                 .maxWith();
                 if (noHeaderFound && withMatches) {
+                    mergeFirstLine(lastTableOfLastPage, firstTable);
                     lastTableOfLastPage.getTable()
                             .append(firstTable.getTable());
                     removeContent(contentByPage, contentByPage.get(i), firstTable);
                 }
             }
+        }
+    }
+
+    private void mergeFirstLine(ContentTable lastTableOfLastPage, ContentTable firstTable) {
+        ParsedTableRow lineToMerge = firstTable.getTable()
+                .getFirst();
+        ParsedTableRow leadingLine = lastTableOfLastPage.getTable()
+                .getLast();
+
+        List<Integer> filledCellsOfLineToMerge = lineToMerge.filledCells();
+        List<Integer> filledCellsOfLeadingLine = leadingLine.filledCells();
+
+        boolean lessFilled = (filledCellsOfLineToMerge.size() / lineToMerge.size() * 100 < PERCENTAGE_OF_FILLED_ROW_BREAK);
+        boolean leadingLinesAreFilled = filledCellsOfLeadingLine.stream()
+                .filter(nr -> !filledCellsOfLeadingLine.contains(nr))
+                .collect(Collectors.toList())
+                .isEmpty();
+
+        if (lessFilled && leadingLinesAreFilled) {
+            for (int nr : filledCellsOfLineToMerge) {
+                leadingLine.appendTo(nr, lineToMerge.get(nr));
+            }
+            firstTable.getTable()
+                    .removeFirst();
         }
     }
 

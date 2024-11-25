@@ -1,0 +1,60 @@
+{
+	"values": [
+		{
+			"searchTerm": "Projekt",
+			"resultName": "projekt"
+		},
+		{
+			"searchTerm": "Rolle",
+			"resultName": "projektRolle"
+		}
+	],
+	"lists": [
+		{
+			"values": [
+				{
+					"searchTerm": "Nr.",
+					"resultName": "id"
+				},
+				{
+					"searchTerm": "Muss-Anforderungen / fachlich zwingende Anforderungen an das Angebot:",
+					"resultName": "anforderung"
+				},
+				{
+					"searchTerm": "Vorgabe zur Antwort",
+					"resultName": "antwort"
+				},
+				{
+					"searchTerm": "art",
+					"resultName": "kritikalität"
+				}
+			],
+			"resultName": "mussAnforderung"
+		},
+		{
+			"values": [
+				{
+					"searchTerm": "Nr.",
+					"resultName": "id"
+				},
+				{
+					"searchTerm": "Fachliche Soll-Anforderungen an das Angebot",
+					"resultName": "anforderung"
+				},
+				{
+					"searchTerm": "Vorgabe zur Antwort",
+					"resultName": "antwort"
+				},
+				{
+					"searchTerm": "Gewicht",
+					"resultName": "gewichtung"
+				},
+				{
+					"searchTerm": "art",
+					"resultName": "kritikalität"
+				}
+			],
+			"resultName": "sollAnforderung"
+		}
+	]
+}

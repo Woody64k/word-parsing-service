@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PdfParser {
     private final static int PERCENTAGE_OF_FILLED_ROW_BREAK = 50;
 
-    public DocumentContent parseConent(List<String> tableHeaderIndicator, MultipartFile uploadFile) {
+    public DocumentContent parseContent(List<String> tableHeaderIndicator, MultipartFile uploadFile) {
         List<DocumentContent> contentByPage = PlainPdfParser.collectDocumentContent(uploadFile);
 
         contentByPage.stream()

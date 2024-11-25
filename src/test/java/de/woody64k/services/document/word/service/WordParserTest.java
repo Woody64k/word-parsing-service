@@ -41,7 +41,7 @@ class WordParserTest {
         try {
             MockMultipartFile testFile = new MockMultipartFile("TestDokument", "TestDokument.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", Files.readAllBytes(file.toPath()));
 
-            DocumentContent content = parser.parseConent(testFile);
+            DocumentContent content = parser.parseContent(testFile);
             assertTrue(content.getTables()
                     .size() == 6, "Number of found Tables is wrong.");
         } catch (IOException e) {
@@ -56,7 +56,7 @@ class WordParserTest {
             MockMultipartFile testFile = new MockMultipartFile("TestDokument", "TestDokument.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", Files.readAllBytes(file.toPath()));
 
             WordParser parser = new WordParser();
-            DocumentContent content = parser.parseConent(testFile);
+            DocumentContent content = parser.parseContent(testFile);
             assertTrue(content.getTables()
                     .size() == 6, "Number of found Tables is wrong.");
         } catch (IOException e) {

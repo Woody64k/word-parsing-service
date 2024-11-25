@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class WordParser {
 
-    public DocumentContent parseConent(MultipartFile uploadFile) {
+    public DocumentContent parseContent(MultipartFile uploadFile) {
         try (XWPFDocument doc = new XWPFDocument(new ByteArrayInputStream(uploadFile.getBytes()))) {
             BodyElementParser bodyParser = new BodyElementParser();
             return bodyParser.parseBodyElements(doc.getBodyElements());

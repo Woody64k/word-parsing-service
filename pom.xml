@@ -37,12 +37,17 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>5.2.5</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>5.2.5</version>
+		</dependency>
 
 		<!-- For Parsing PDF -->
 		<dependency>
 			<groupId>technology.tabula</groupId>
 			<artifactId>tabula</artifactId>
-			<version>1.0.5</version>
+			<version>1.0.4</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>

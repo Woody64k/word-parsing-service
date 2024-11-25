@@ -15,6 +15,7 @@ import lombok.Data;
 public class DocumentContent implements IContent {
     @JsonIgnore
     private static final long serialVersionUID = 1L;
+    private String fileName;
     private ArrayList<IContent> content = new ArrayList<>();
 
     @JsonIgnore
@@ -29,8 +30,8 @@ public class DocumentContent implements IContent {
         content.add(contentBlock);
     }
 
-    public void addTable(ContentTable table) {
-        add(table);
+    public void addAll(List<IContent> contentBlock) {
+        content.addAll(contentBlock);
     }
 
     public void addTables(Collection<ContentTable> tables) {

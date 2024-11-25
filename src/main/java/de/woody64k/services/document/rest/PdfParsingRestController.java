@@ -36,7 +36,7 @@ public class PdfParsingRestController {
     @PostMapping(value = "/content", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public DocumentContent parseContent(@RequestParam List<String> tableHeaderIndicator, @RequestParam("file") MultipartFile uploadFile) {
         try {
-            return parser.parseConent(tableHeaderIndicator, uploadFile);
+            return parser.parseContent(tableHeaderIndicator, uploadFile);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

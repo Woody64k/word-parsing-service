@@ -29,7 +29,7 @@ public class BodyElementParser {
                 case BodyElementType.TABLE: {
                     ContentTable contentTable = FlatTableParser.parseTable((XWPFTable) cnt, headingNumId);
                     if (contentTable.isFilled()) {
-                        docContent.addTable(contentTable);
+                        docContent.add(contentTable);
                     }
                     break;
                 }

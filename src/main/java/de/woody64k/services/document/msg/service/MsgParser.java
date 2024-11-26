@@ -1,6 +1,5 @@
 package de.woody64k.services.document.msg.service;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +7,11 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.apache.poi.hsmf.MAPIMessage;
-import org.apache.poi.hsmf.datatypes.AttachmentChunks;
 import org.apache.poi.hsmf.exceptions.ChunkNotFoundException;
+import org.jetbrains.annotations.NotNull;
+import org.simplejavamail.api.email.AttachmentResource;
+import org.simplejavamail.api.email.Email;
+import org.simplejavamail.converter.EmailConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class MsgParser {
-    private final static int PERCENTAGE_OF_FILLED_ROW_BREAK = 50;
 
     @Autowired
     WordParser wordParser;
@@ -37,11 +37,13 @@ public class MsgParser {
     PdfParser pdfParser;
 
     public DocumentContent parseContent(List<String> tableHeaderIndicator, MultipartFile uploadFile) {
-        try (MAPIMessage msg = new MAPIMessage(new ByteArrayInputStream(uploadFile.getBytes()))) {
-            DocumentContent mail = convertMail(msg);
+        try {
+            Email email = EmailConverter.outlookMsgToEmail(uploadFile.getInputStream());
+            DocumentContent mail = convertMail(email);
 
             // Handle Attachments.
-            AttachmentChunks[] attachments = msg.getAttachmentFiles();
+            @NotNull
+            List<AttachmentResource> attachments = email.getDecryptedAttachments();
             List<MultipartFile> listOfAttachedFiles = convertAttachments(attachments);
             mail.addAll(parseAllAttachmants(tableHeaderIndicator, listOfAttachedFiles));
             mail.setFileName(uploadFile.getOriginalFilename());
@@ -51,11 +53,10 @@ public class MsgParser {
         }
     }
 
-    private DocumentContent convertMail(MAPIMessage msg) throws ChunkNotFoundException {
+    private DocumentContent convertMail(Email email) throws ChunkNotFoundException {
         DocumentContent mail = new DocumentContent();
-        msg.setReturnNullOnMissingChunk(true);
-        mail.addText(String.format("Subject: %s", msg.getSubject()));
-        mail.addAll(processBody(msg.getTextBody()));
+        mail.addText(String.format("Subject: %s", email.getSubject()));
+        mail.addAll(processBody(email.getPlainText()));
         return mail;
     }
 
@@ -94,16 +95,6 @@ public class MsgParser {
         return "";
     }
 
-    public List<MultipartFile> getAttachments(MultipartFile uploadFile) {
-        try (MAPIMessage msg = new MAPIMessage(new ByteArrayInputStream(uploadFile.getBytes()))) {
-            AttachmentChunks[] attachments = msg.getAttachmentFiles();
-            List<MultipartFile> listOfAttachedFiles = convertAttachments(attachments);
-            return listOfAttachedFiles;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public List<IContent> parseAllAttachmants(List<String> tableHeaderIndicator, List<MultipartFile> files) {
         List<IContent> result = new ArrayList<>();
         for (MultipartFile file : files) {
@@ -117,7 +108,7 @@ public class MsgParser {
                     break;
                 case ZIP:
                     List<MultipartFile> filesOfZip = unZip(file);
-                    files.addAll(filesOfZip);
+                    result.addAll(parseAllAttachmants(tableHeaderIndicator, filesOfZip));
                     break;
                 default:
                     break;
@@ -140,9 +131,9 @@ public class MsgParser {
         }
     }
 
-    public List<MultipartFile> convertAttachments(AttachmentChunks[] attachments) {
+    public List<MultipartFile> convertAttachments(@NotNull List<AttachmentResource> attachments) throws IOException {
         List<MultipartFile> listOfAttachedFiles = new ArrayList<>();
-        for (AttachmentChunks attachment : attachments) {
+        for (AttachmentResource attachment : attachments) {
             listOfAttachedFiles.add(new Attachment(attachment));
         }
         return listOfAttachedFiles;
@@ -150,7 +141,8 @@ public class MsgParser {
 
     private Filetypes detectFileType(MultipartFile file) {
         for (Filetypes type : Filetypes.values()) {
-            if (type.mimeType.equalsIgnoreCase(file.getContentType())) {
+            if (file.getContentType()
+                    .contains(type.mimeType)) {
                 return type;
             }
         }
@@ -158,7 +150,7 @@ public class MsgParser {
     }
 
     public enum Filetypes {
-        DOC("application/msword"), DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document"), ZIP("application/x-zip"), PDF(MediaType.APPLICATION_PDF.toString()), OTHERS("");
+        DOC("application/msword"), DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document"), PDF(MediaType.APPLICATION_PDF.toString()), ZIP("application/x-zip"), SIGNATURE("multipart/signed"), OTHERS("");
 
         private final String mimeType;
 

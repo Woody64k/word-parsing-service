@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLConnection;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -36,7 +37,7 @@ public class AttachmentFromZip implements MultipartFile {
 
     @Override
     public String getContentType() {
-        return TYPE_MAP.getContentType(attachment.getName());
+        return URLConnection.guessContentTypeFromName(attachment.getName());
     }
 
     @Override

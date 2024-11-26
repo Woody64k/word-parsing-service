@@ -71,15 +71,25 @@ public class PlainPdfParser {
 
         List<List<RectangularTextContainer>> rows = table.getRows();
         // iterate over the rows of the table
+        List<RectangularTextContainer> lastRow = new ArrayList<>();
         for (List<RectangularTextContainer> cells : rows) {
-            ParsedTableRow contentRow = new ParsedTableRow();
-            // print all column-cells of the row plus linefeed
-            for (RectangularTextContainer cellContent : cells) {
-                contentRow.add(getOneLineText(cellContent));
+            if (lastRow.isEmpty() || !lastRow.get(0)
+                    .contains(cells.get(0))) {
+                ParsedTableRow contentRow = readRow(cells);
+                lastRow = cells;
+                contentTable.add(contentRow);
             }
-            contentTable.add(contentRow);
         }
         return cleanupTable(contentTable);
+    }
+
+    public static ParsedTableRow readRow(List<RectangularTextContainer> cells) {
+        ParsedTableRow contentRow = new ParsedTableRow();
+        // print all column-cells of the row plus linefeed
+        for (RectangularTextContainer cellContent : cells) {
+            contentRow.add(getOneLineText(cellContent));
+        }
+        return contentRow;
     }
 
     /**

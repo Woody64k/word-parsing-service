@@ -4,65 +4,64 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
-import org.apache.poi.hsmf.datatypes.AttachmentChunks;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-public class Attachment implements MultipartFile {
+import jakarta.activation.MimetypesFileTypeMap;
 
-    private AttachmentChunks attachment;
+public class AttachmentFromZip implements MultipartFile {
 
-    public Attachment(AttachmentChunks attachment) {
+    private ZipEntry attachment;
+    private byte[] data;
+    private static final MimetypesFileTypeMap TYPE_MAP = new MimetypesFileTypeMap();
+
+    public AttachmentFromZip(ZipEntry attachment, ZipInputStream zipIn) throws IOException {
         super();
         this.attachment = attachment;
+        this.data = zipIn.readAllBytes();
     }
 
     @Override
     public String getName() {
-        return attachment.getAttachFileName()
-                .getValue();
+        return attachment.getName();
     }
 
     @Override
     public String getOriginalFilename() {
-        return attachment.getAttachLongFileName()
-                .getValue();
+        return attachment.getName();
     }
 
     @Override
     public String getContentType() {
-        if (attachment.getAttachMimeTag() == null) {
-            return "";
-        } else {
-            return attachment.getAttachMimeTag()
-                    .getValue();
-        }
+        return TYPE_MAP.getContentType(attachment.getName());
     }
 
     @Override
     public boolean isEmpty() {
-        return attachment.getEmbeddedAttachmentObject().length == 0;
+        return data.length == 0L;
     }
 
     @Override
     public long getSize() {
-        return attachment.getEmbeddedAttachmentObject().length;
+        return data.length;
     }
 
     @Override
     public byte[] getBytes() throws IOException {
-        return attachment.getEmbeddedAttachmentObject();
+        return data;
     }
 
     @Override
     public InputStream getInputStream() throws IOException {
-        return new ByteArrayInputStream(attachment.getEmbeddedAttachmentObject());
+        return new ByteArrayInputStream(data);
     }
 
     @Override
     public void transferTo(File dest) throws IOException, IllegalStateException {
-        FileCopyUtils.copy(attachment.getEmbeddedAttachmentObject(), dest);
+        FileCopyUtils.copy(data, dest);
     }
 
 }

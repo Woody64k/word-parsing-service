@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.apache.poi.hsmf.MAPIMessage;
 import org.apache.poi.hsmf.datatypes.AttachmentChunks;
@@ -18,6 +20,7 @@ import de.woody64k.services.document.model.content.ContentText;
 import de.woody64k.services.document.model.content.DocumentContent;
 import de.woody64k.services.document.model.content.IContent;
 import de.woody64k.services.document.msg.service.model.Attachment;
+import de.woody64k.services.document.msg.service.model.AttachmentFromZip;
 import de.woody64k.services.document.pdf.service.PdfParser;
 import de.woody64k.services.document.word.service.WordParser;
 import lombok.extern.slf4j.Slf4j;
@@ -112,11 +115,29 @@ public class MsgParser {
                 case PDF:
                     result.add(pdfParser.parseContent(tableHeaderIndicator, file));
                     break;
+                case ZIP:
+                    List<MultipartFile> filesOfZip = unZip(file);
+                    files.addAll(filesOfZip);
+                    break;
                 default:
                     break;
             }
         }
         return result;
+    }
+
+    private List<MultipartFile> unZip(MultipartFile zipFile) {
+        List<MultipartFile> returnList = new ArrayList<>();
+        try (ZipInputStream zipIn = new ZipInputStream(zipFile.getInputStream())) {
+            for (ZipEntry entry = zipIn.getNextEntry(); entry != null; entry = zipIn.getNextEntry()) {
+                if (!entry.isDirectory()) {
+                    returnList.add(new AttachmentFromZip(entry, zipIn));
+                }
+            }
+            return returnList;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<MultipartFile> convertAttachments(AttachmentChunks[] attachments) {
@@ -137,7 +158,7 @@ public class MsgParser {
     }
 
     public enum Filetypes {
-        DOC("application/msword"), DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document"), PDF(MediaType.APPLICATION_PDF.toString()), OTHERS("");
+        DOC("application/msword"), DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document"), ZIP("application/x-zip"), PDF(MediaType.APPLICATION_PDF.toString()), OTHERS("");
 
         private final String mimeType;
 

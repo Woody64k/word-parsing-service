@@ -39,6 +39,7 @@ public class MsgParser {
             AttachmentChunks[] attachments = msg.getAttachmentFiles();
             List<MultipartFile> listOfAttachedFiles = convertAttachments(attachments);
             mail.addAll(parseAllAttachmants(tableHeaderIndicator, listOfAttachedFiles));
+            mail.setFileName(uploadFile.getOriginalFilename());
             return mail;
         } catch (IOException | ChunkNotFoundException e) {
             throw new RuntimeException(e);

@@ -18,7 +18,9 @@ public class WordParser {
     public DocumentContent parseContent(MultipartFile uploadFile) {
         try (XWPFDocument doc = new XWPFDocument(new ByteArrayInputStream(uploadFile.getBytes()))) {
             BodyElementParser bodyParser = new BodyElementParser();
-            return bodyParser.parseBodyElements(doc.getBodyElements());
+            DocumentContent content = bodyParser.parseBodyElements(doc.getBodyElements());
+            content.setFileName(uploadFile.getOriginalFilename());
+            return content;
         } catch (IOException e) {
             log.error("Error while parse Document.", e);
             throw new RuntimeException(e);

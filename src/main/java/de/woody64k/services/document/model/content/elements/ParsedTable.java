@@ -2,7 +2,11 @@ package de.woody64k.services.document.model.content.elements;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import de.woody64k.services.document.util.Checker;
 import lombok.Data;
@@ -72,6 +76,22 @@ public class ParsedTable extends ArrayList<ParsedTableRow> {
             }
         }
         return max;
+    }
+
+    public Map<Integer, DescriptiveStatistics> calculateColumnStatistics() {
+        Map<Integer, DescriptiveStatistics> statistics = new LinkedHashMap<>();
+        for (ParsedTableRow row : this) {
+            for (int i = 0; i < row.size(); i++) {
+                if (!statistics.containsKey(i)) {
+                    statistics.put(i, new DescriptiveStatistics());
+                }
+                statistics.get(i)
+                        .addValue(row.get(i)
+                                .toString()
+                                .length());
+            }
+        }
+        return statistics;
     }
 
     public void append(ParsedTable table) {

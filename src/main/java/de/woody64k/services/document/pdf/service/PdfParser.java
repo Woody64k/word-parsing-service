@@ -1,8 +1,10 @@
 package de.woody64k.services.document.pdf.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,6 +13,7 @@ import de.woody64k.services.document.model.content.ContentText;
 import de.woody64k.services.document.model.content.DocumentContent;
 import de.woody64k.services.document.model.content.IContent;
 import de.woody64k.services.document.model.content.IContent.ContentCategory;
+import de.woody64k.services.document.model.content.elements.ParsedTable;
 import de.woody64k.services.document.model.content.elements.ParsedTableRow;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +33,7 @@ public class PdfParser {
         mergeTextsAcrossPages(contentByPage);
 
         DocumentContent content = DocumentContent.from(contentByPage);
+        content.setFileName(uploadFile.getOriginalFilename());
         return content;
     }
 
@@ -56,33 +60,32 @@ public class PdfParser {
             List<ContentTable> pageTables = contentByPage.get(i)
                     .getTables();
             if (lastPageTables.size() > 0 && pageTables.size() > 0) {
-                ContentTable lastTableOfLastPage = lastPageTables.getLast();
-                ContentTable firstTable = pageTables.getFirst();
+                ParsedTable lastTableOfLastPage = lastPageTables.getLast()
+                        .getTable();
+                ContentTable firstTableBlock = pageTables.getFirst();
+                ParsedTable firstTable = pageTables.getFirst()
+                        .getTable();
 
-                boolean noHeaderFound = firstTable.getTable()
-                        .getFirst()
+                boolean hasOnlyOneRow = firstTable.size() == 1;
+                boolean noHeaderFound = firstTable.getFirst()
                         .stream()
                         .filter(headLine -> tableHeaderIndicator.contains(headLine))
                         .collect(Collectors.toList())
                         .isEmpty();
-                boolean withMatches = firstTable.getTable()
-                        .maxWith() == lastTableOfLastPage.getTable()
-                                .maxWith();
-                if (noHeaderFound && withMatches) {
+                boolean withMatches = firstTable.maxWith() == lastTableOfLastPage.maxWith();
+
+                if (hasOnlyOneRow || (noHeaderFound && withMatches)) {
                     mergeFirstLine(lastTableOfLastPage, firstTable);
-                    lastTableOfLastPage.getTable()
-                            .append(firstTable.getTable());
-                    removeContent(contentByPage, contentByPage.get(i), firstTable);
+                    lastTableOfLastPage.append(firstTable);
+                    removeContent(contentByPage, contentByPage.get(i), firstTableBlock);
                 }
             }
         }
     }
 
-    private void mergeFirstLine(ContentTable lastTableOfLastPage, ContentTable firstTable) {
-        ParsedTableRow lineToMerge = firstTable.getTable()
-                .getFirst();
-        ParsedTableRow leadingLine = lastTableOfLastPage.getTable()
-                .getLast();
+    private void mergeFirstLine(ParsedTable lastTableOfLastPage, ParsedTable firstTable) {
+        ParsedTableRow lineToMerge = firstTable.getFirst();
+        ParsedTableRow leadingLine = lastTableOfLastPage.getLast();
 
         List<Integer> filledCellsOfLineToMerge = lineToMerge.filledCells();
         List<Integer> filledCellsOfLeadingLine = leadingLine.filledCells();
@@ -97,8 +100,27 @@ public class PdfParser {
             for (int nr : filledCellsOfLineToMerge) {
                 leadingLine.appendTo(nr, lineToMerge.get(nr));
             }
-            firstTable.getTable()
-                    .removeFirst();
+            firstTable.removeFirst();
+        } else {
+            if (firstTable.size() == 1) {
+                // Special Case for table stubs
+                Map<Integer, DescriptiveStatistics> statics = lastTableOfLastPage.calculateColumnStatistics();
+
+                // Expect the Columns wit the most text in average will be splitted
+                Map<Integer, DescriptiveStatistics> filteredStatistcs = statics.entrySet()
+                        .stream()
+                        .sorted((e1, e2) -> (e2.getValue()
+                                .getGeometricMean()
+                                - e1.getValue()
+                                        .getGeometricMean()) > 0 ? 1 : -1)
+                        .limit(filledCellsOfLineToMerge.size())
+                        .collect(Collectors.toMap(map -> map.getKey(), map -> map.getValue()));
+                for (int i : filteredStatistcs.keySet()) {
+                    Object toMerge = lineToMerge.get(filledCellsOfLineToMerge.removeFirst());
+                    leadingLine.appendTo(i, toMerge);
+                }
+                firstTable.removeFirst();
+            }
         }
     }
 

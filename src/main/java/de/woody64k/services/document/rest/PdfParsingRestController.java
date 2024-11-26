@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import de.woody64k.services.document.model.content.DocumentContent;
 import de.woody64k.services.document.model.value.request.DocumentValueRequirement;
 import de.woody64k.services.document.model.value.request.validate.RequestValidator;
-import de.woody64k.services.document.model.value.response.WordValues;
+import de.woody64k.services.document.model.value.response.DocumentValues;
 import de.woody64k.services.document.pdf.service.PdfParser;
 import de.woody64k.services.document.service.DocumentAnalyser;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -45,7 +45,7 @@ public class PdfParsingRestController {
     @CrossOrigin
     @PostMapping(value = "/content/values", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @RequestBody(content = @Content(encoding = @Encoding(name = "request", contentType = "application/json")))
-    public WordValues parseValues(@RequestParam List<String> tableHeaderIndicator, @RequestPart DocumentValueRequirement request, @RequestPart("file") MultipartFile uploadFile) {
+    public DocumentValues parseValues(@RequestParam List<String> tableHeaderIndicator, @RequestPart DocumentValueRequirement request, @RequestPart("file") MultipartFile uploadFile) {
         try {
             RequestValidator.validate(request);
             DocumentContent parsedData = parseContent(tableHeaderIndicator, uploadFile);

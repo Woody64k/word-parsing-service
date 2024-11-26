@@ -5,14 +5,14 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class WordValues {
+public class DocumentValues {
     GenericObject data = new GenericObject();
 
     public void addValue(String key, String value) {
         data.put(key, value);
     }
 
-    public void integrate(WordValues values) {
+    public void integrate(DocumentValues values) {
         data.putAll(values.getData());
     }
 

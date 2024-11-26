@@ -9,4 +9,5 @@ import lombok.EqualsAndHashCode;
 public class ListRequirement extends ValueRequirements {
     String resultName;
     ListTransformRequirement transform;
+    Integer ignoreUnknownHeader;
 }

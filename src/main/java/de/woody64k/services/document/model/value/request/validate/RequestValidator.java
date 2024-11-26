@@ -18,11 +18,12 @@ public class RequestValidator {
                 }
             }
         } else {
-            throw new RuntimeException(String.format("Search for '%s' is invalid. It contains substrauture and value Mapping.", value.getSearchTerm()));
+            throw new RuntimeException(String.format("Search for '%s' is invalid. It contains substructure and value Mapping.", value.getSearchTerm()));
         }
     }
 
     private static boolean verify(SearchRequirement value) {
-        return (value.getTransform() != null && value.getValues() != null);
+        return (value.getTransform() != null && !value.getValues()
+                .isEmpty());
     }
 }

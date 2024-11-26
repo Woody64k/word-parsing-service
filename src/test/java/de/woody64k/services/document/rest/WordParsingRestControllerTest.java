@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.woody64k.services.document.model.value.request.DocumentValueRequirement;
 import de.woody64k.services.document.model.value.response.GenericObject;
-import de.woody64k.services.document.model.value.response.WordValues;
+import de.woody64k.services.document.model.value.response.DocumentValues;
 import de.woody64k.services.document.rest.WordParsingRestController;
 
 @ActiveProfiles("test")
@@ -47,7 +47,7 @@ class WordParsingRestControllerTest {
             MockMultipartFile testFile = new MockMultipartFile("TestDokument", "TestDokument.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", Files.readAllBytes(wordFile.getFile()
                     .toPath()));
             DocumentValueRequirement valueRequest = mapper.readValue(requestFile.getFile(), DocumentValueRequirement.class);
-            WordValues result = analyser.parseValuesFromWord(valueRequest, testFile);
+            DocumentValues result = analyser.parseValuesFromWord(valueRequest, testFile);
             assertTrue(result.getData()
                     .size() > 0);
             assertSplit(result);
@@ -58,13 +58,13 @@ class WordParsingRestControllerTest {
         }
     }
 
-    private void assertDefaultValue(WordValues result) {
+    private void assertDefaultValue(DocumentValues result) {
         Object value = result.getData()
                 .get("defaultValue");
         assertTrue(((String) value).contentEquals("Default Test Value"));
     }
 
-    private void assertSplit(WordValues result) {
+    private void assertSplit(DocumentValues result) {
         List<GenericObject> pets = (List<GenericObject>) result.getData()
                 .get("pets");
         GenericObject measures = (GenericObject) pets.get(0)
@@ -72,7 +72,7 @@ class WordParsingRestControllerTest {
         assertTrue(((String) measures.get("additionalSizeInformation")).contentEquals("Wingspan: 24 cm"));
     }
 
-    public void assertMergeAndFilter(WordValues result) {
+    public void assertMergeAndFilter(DocumentValues result) {
         List<GenericObject> mergeAndFilterTestData = (List<GenericObject>) result.getData()
                 .get("wettervorhersage");
         assertTrue(mergeAndFilterTestData.size() == 3);

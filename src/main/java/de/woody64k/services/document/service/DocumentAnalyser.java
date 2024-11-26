@@ -48,10 +48,10 @@ public class DocumentAnalyser {
     }
 
     public DocumentValues getValuesFromContainer(DocumentContent parsedData, DocumentContainerRequirement request) {
-        DocumentValues container = getValues(parsedData, request.getContainer());
+        DocumentValues container = getValues(parsedData, request);
         List<DocumentValues> containedDocuments = new ArrayList<>();
         for (IContent document : parsedData.getAllByCategory(ContentCategory.DOCUMENT)) {
-            containedDocuments.add(getValues((DocumentContent) document, request.getDocument()));
+            containedDocuments.add(getValues((DocumentContent) document, request.getDocuments()));
         }
         container.getData()
                 .put("documents", containedDocuments);

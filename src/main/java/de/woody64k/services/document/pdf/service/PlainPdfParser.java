@@ -44,12 +44,12 @@ public class PlainPdfParser {
         List<RectangularTextContainer> textsOfPage = getPageTexts(page);
 
         if (tableList.isEmpty()) {
-            content.addText(combineText(textsOfPage));
+            content.addTexts(combineText(textsOfPage));
         } else {
             for (Table table : tableList) {
                 // Collect Text before Table
                 List<RectangularTextContainer> textBeforeTable = findTextBeforeTable(textsOfPage, table);
-                content.addText(combineText(textBeforeTable));
+                content.addTexts(combineText(textBeforeTable));
                 textsOfPage.removeAll(textBeforeTable);
 
                 ContentTable contentTable = readTable(table);
@@ -59,7 +59,7 @@ public class PlainPdfParser {
                 textsOfPage = findTextAfterTable(textsOfPage, table);
             }
             // Collect Text After Tables
-            content.addText(combineText(textsOfPage));
+            content.addTexts(combineText(textsOfPage));
         }
         return content;
     }
@@ -76,7 +76,6 @@ public class PlainPdfParser {
                 contentRow.add(getOneLineText(cellContent));
             }
             contentTable.add(contentRow);
-            System.out.println();
         }
         return cleanupTable(contentTable);
     }
@@ -121,17 +120,31 @@ public class PlainPdfParser {
         return textsKeep;
     }
 
-    private static String combineText(List<RectangularTextContainer> textsOfPage) {
+    private static List<String> combineText(List<RectangularTextContainer> textsOfPage) {
+        List<String> texts = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         for (RectangularTextContainer textBlock : textsOfPage) {
             String text = getOneLineText(textBlock);
             if (text != null && !text.isBlank()) {
-                if (!sb.isEmpty()) {
-                    sb.append('\n');
+                if (text.contains(":")) {
+                    if (!sb.isEmpty()) {
+                        texts.add(createStringWithoutWordBreaks(sb));
+                        sb.setLength(0);
+                        texts.add(text);
+                    }
+                } else {
+                    if (!sb.isEmpty()) {
+                        sb.append('\n');
+                    }
+                    sb.append(text);
                 }
-                sb.append(text);
             }
         }
+        texts.add(createStringWithoutWordBreaks(sb));
+        return texts;
+    }
+
+    public static String createStringWithoutWordBreaks(StringBuilder sb) {
         return sb.toString()
                 .replace("-\n", "");
     }

@@ -38,6 +38,12 @@ public class DocumentContent implements IContent {
         getContent().addAll(tables);
     }
 
+    public void addTexts(List<String> textList) {
+        for (String text : textList) {
+            addText(text);
+        }
+    }
+
     public ContentText addText(String text) {
         if (text != null && !text.isBlank()) {
             ContentText textContent = ContentText.create(text);

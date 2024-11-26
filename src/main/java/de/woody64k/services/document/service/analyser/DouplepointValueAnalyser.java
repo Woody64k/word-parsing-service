@@ -70,7 +70,7 @@ public class DouplepointValueAnalyser {
             // collect next lines if they doesn't contain:
             String[] lines = other.split("\n");
             for (int i = 0; i < lines.length; i++) {
-                if (lines[i].contains(":")) {
+                if (lines[i].contains(":") || lines[i].isBlank()) {
                     // minumum the first line
                     return Arrays.copyOfRange(lines, 0, (i < 1) ? 1 : i);
                 }

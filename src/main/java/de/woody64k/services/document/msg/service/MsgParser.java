@@ -53,7 +53,6 @@ public class MsgParser {
         msg.setReturnNullOnMissingChunk(true);
         mail.addText(String.format("Subject: %s", msg.getSubject()));
         mail.addAll(processBody(msg.getTextBody()));
-
         return mail;
     }
 

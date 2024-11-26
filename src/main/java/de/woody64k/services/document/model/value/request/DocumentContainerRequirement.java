@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode()
-public class DocumentContainerRequirement {
-    DocumentValueRequirement container = new DocumentValueRequirement();
-    DocumentValueRequirement document = new DocumentValueRequirement();
+public class DocumentContainerRequirement extends DocumentValueRequirement {
+    DocumentValueRequirement documents = new DocumentValueRequirement();
 }

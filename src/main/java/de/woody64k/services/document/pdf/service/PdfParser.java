@@ -45,8 +45,9 @@ public class PdfParser {
                     .getLast();
             IContent firstBlock = pageContent.getContent()
                     .getFirst();
-            if (ContentCategory.TEXT == firstBlock.getContentCategory() && ContentCategory.TEXT == lastBlockOfLastPage.getContentCategory()) {
-                ((ContentText) lastBlockOfLastPage).appendText("/n")
+            if (ContentCategory.TEXT == firstBlock.getContentCategory() && ContentCategory.TEXT == lastBlockOfLastPage.getContentCategory() && !firstBlock.flattenToString()
+                    .contains(":")) {
+                ((ContentText) lastBlockOfLastPage).appendText("\n")
                         .appendText(firstBlock.flattenToString());
                 removeContent(contentByPage, pageContent, firstBlock);
             }

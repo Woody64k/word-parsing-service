@@ -66,9 +66,11 @@ public class HeadingRowAnalyser {
         GenericObject oneRow = new GenericObject();
         // read Values
         for (SearchRequirement valueRequ : listRequirement.getValues()) {
-            Integer matchColumn = matches.get(valueRequ.getResultName());
-            String text = (String) row.get(matchColumn);
-            oneRow.putAndFlatten(valueRequ.getResultName(), ValueTransformer.transform(text, valueRequ.getTransform()), false);
+            if (matches.containsKey(valueRequ.getResultName())) {
+                Integer matchColumn = matches.get(valueRequ.getResultName());
+                String text = (String) row.get(matchColumn);
+                oneRow.putAndFlatten(valueRequ.getResultName(), ValueTransformer.transform(text, valueRequ.getTransform()), false);
+            }
         }
         return oneRow;
     }

@@ -55,7 +55,9 @@ public class PlainPdfParser {
                 ContentTable contentTable = readTable(table);
 
                 cleanupTable(contentTable);
-                content.add(contentTable);
+                if (!contentTable.isBlank()) {
+                    content.add(contentTable);
+                }
                 textsOfPage = findTextAfterTable(textsOfPage, table);
             }
             // Collect Text After Tables

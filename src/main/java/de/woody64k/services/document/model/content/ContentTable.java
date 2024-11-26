@@ -57,4 +57,8 @@ public class ContentTable implements IContent {
         }
         return String.join("\n", collection);
     }
+
+    public boolean isBlank() {
+        return table.isBlank();
+    }
 }

@@ -42,12 +42,12 @@ public class SearchRequirement extends ValueRequirements {
 
     public Pattern buildRegex(String value) {
         if (useRegex) {
-            return Pattern.compile(value, Pattern.CASE_INSENSITIVE);
+            return Pattern.compile(value.replaceAll("\s+", ""), Pattern.CASE_INSENSITIVE);
         } else {
-            List<String> parts = Arrays.asList(value.split("\\s+"));
+            List<String> parts = Arrays.asList(value.split("\s+"));
             String regex = parts.stream()
                     .map(p -> Pattern.quote(p))
-                    .collect(Collectors.joining("\\s+"));
+                    .collect(Collectors.joining());
             return Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         }
     }

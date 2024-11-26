@@ -97,4 +97,15 @@ public class ParsedTable extends ArrayList<ParsedTableRow> {
     public void append(ParsedTable table) {
         addAll(table);
     }
+
+    public boolean isBlank() {
+        for (ParsedTableRow row : this) {
+            if (!row.isBlank()) {
+                // Something in row
+                return false;
+            }
+        }
+        // no or only blank rows
+        return true;
+    }
 }

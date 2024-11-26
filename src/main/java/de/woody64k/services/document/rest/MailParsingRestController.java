@@ -33,7 +33,7 @@ public class MailParsingRestController {
 
     @CrossOrigin
     @PostMapping(value = "/content", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public DocumentContent parseContent(@RequestParam List<String> tableHeaderIndicator, @RequestParam("file") MultipartFile uploadFile) {
+    public DocumentContent parseContent(@RequestParam(required = false) List<String> tableHeaderIndicator, @RequestParam("file") MultipartFile uploadFile) {
         try {
             return parser.parseContent(tableHeaderIndicator, uploadFile);
         } catch (Exception e) {
@@ -44,7 +44,7 @@ public class MailParsingRestController {
     @CrossOrigin
     @PostMapping(value = "/content/values", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @RequestBody(content = @Content(encoding = @Encoding(name = "request", contentType = "application/json")))
-    public DocumentValues parseValues(@RequestParam List<String> tableHeaderIndicator, @RequestPart DocumentContainerRequirement request, @RequestPart("file") MultipartFile uploadFile) {
+    public DocumentValues parseValues(@RequestParam(required = false) List<String> tableHeaderIndicator, @RequestPart DocumentContainerRequirement request, @RequestPart("file") MultipartFile uploadFile) {
         try {
             DocumentContent parsedData = parseContent(tableHeaderIndicator, uploadFile);
             return analyser.getValuesFromContainer(parsedData, request);

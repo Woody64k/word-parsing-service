@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.poi.hsmf.MAPIMessage;
 import org.apache.poi.hsmf.datatypes.AttachmentChunks;
@@ -13,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import de.woody64k.services.document.model.content.ContentText;
 import de.woody64k.services.document.model.content.DocumentContent;
 import de.woody64k.services.document.model.content.IContent;
 import de.woody64k.services.document.msg.service.model.Attachment;
@@ -50,9 +52,44 @@ public class MsgParser {
         DocumentContent mail = new DocumentContent();
         msg.setReturnNullOnMissingChunk(true);
         mail.addText(String.format("Subject: %s", msg.getSubject()));
-        mail.addText(String.format("HTML-Body: %s", msg.getHtmlBody()));
-        mail.addText(String.format("Text-Body: %s", msg.getTextBody()));
+        mail.addAll(processBody(msg.getTextBody()));
+
         return mail;
+    }
+
+    private List<IContent> processBody(String textBody) {
+        List<String> lines = textBody.lines()
+                .collect(Collectors.toList());
+        List<String> newLines = new ArrayList<>();
+        String lastDoublepointLine = "";
+        for (String line : lines) {
+            if (line.trim()
+                    .length() > 0) {
+                if (line.contains(":")) {
+                    store(newLines, lastDoublepointLine);
+                    lastDoublepointLine = line.trim();
+                } else {
+                    if (!lastDoublepointLine.isBlank() && line.trim()
+                            .length() > 0) {
+                        lastDoublepointLine = lastDoublepointLine.concat(" " + line.trim());
+                    } else {
+                        lastDoublepointLine = store(newLines, lastDoublepointLine);
+                        newLines.add(line);
+                    }
+                }
+            }
+        }
+        store(newLines, lastDoublepointLine);
+        return newLines.stream()
+                .map(str -> ContentText.create(str))
+                .collect(Collectors.toList());
+    }
+
+    public String store(List<String> newLines, String lastDoublepointLine) {
+        if (lastDoublepointLine.length() > 0) {
+            newLines.add(lastDoublepointLine);
+        }
+        return "";
     }
 
     public List<MultipartFile> getAttachments(MultipartFile uploadFile) {

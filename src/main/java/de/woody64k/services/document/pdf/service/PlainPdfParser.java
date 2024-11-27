@@ -71,16 +71,53 @@ public class PlainPdfParser {
 
         List<List<RectangularTextContainer>> rows = table.getRows();
         // iterate over the rows of the table
-        List<RectangularTextContainer> lastRow = new ArrayList<>();
+        int lineCount = 0;
         for (List<RectangularTextContainer> cells : rows) {
-            if (lastRow.isEmpty() || !lastRow.get(0)
-                    .contains(cells.get(0))) {
-                ParsedTableRow contentRow = readRow(cells);
-                lastRow = cells;
-                contentTable.add(contentRow);
-            }
+            cells = cellsContainedInSorunding(cells, table, lineCount);
+            ParsedTableRow contentRow = readRow(cells);
+            contentTable.add(contentRow);
+            lineCount++;
         }
         return cleanupTable(contentTable);
+    }
+
+    private static List<RectangularTextContainer> cellsContainedInSorunding(List<RectangularTextContainer> cells, Table table, int lineIndex) {
+        List<RectangularTextContainer> columnsToRemove = new ArrayList<>();
+        for (int i = 0; i < cells.size(); i++) {
+            RectangularTextContainer cell = cells.get(i);
+            if (containedInLeftCells(cells, i)) {
+                columnsToRemove.add(cell);
+            } else if (containedInAbothCells(table, lineIndex, i)) {
+                columnsToRemove.add(cell);
+            }
+        }
+        cells.removeAll(columnsToRemove);
+        return cells;
+    }
+
+    private static boolean containedInAbothCells(Table table, int lineIndex, int i) {
+        RectangularTextContainer actualCell = table.getCell(lineIndex, i);
+        for (int j = lineIndex - 1; j >= 0; j--) {
+            List<RectangularTextContainer> rowAboth = table.getRows()
+                    .get(j);
+            for (RectangularTextContainer cell : rowAboth) {
+                if (cell.contains(actualCell)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean containedInLeftCells(List<RectangularTextContainer> cells, int i) {
+        RectangularTextContainer actualCell = cells.get(i);
+        for (int j = i - 1; j >= 0; j--) {
+            if (cells.get(j)
+                    .contains(actualCell)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static ParsedTableRow readRow(List<RectangularTextContainer> cells) {

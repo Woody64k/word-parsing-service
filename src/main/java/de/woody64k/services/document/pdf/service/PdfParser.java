@@ -45,7 +45,7 @@ public class PdfParser {
                     .getLast();
             IContent firstBlock = pageContent.getContent()
                     .getFirst();
-            if (ContentCategory.TEXT == firstBlock.getContentCategory() && ContentCategory.TEXT == lastBlockOfLastPage.getContentCategory() && !firstBlock.flattenToString()
+            if (ContentCategory.TEXT == firstBlock.getContentCategory() && ContentCategory.TEXT == lastBlockOfLastPage.getContentCategory() && !lastBlockOfLastPage.flattenToString()
                     .contains(":")) {
                 ((ContentText) lastBlockOfLastPage).appendText("\n")
                         .appendText(firstBlock.flattenToString());
@@ -61,27 +61,56 @@ public class PdfParser {
             List<ContentTable> pageTables = contentByPage.get(i)
                     .getTables();
             if (lastPageTables.size() > 0 && pageTables.size() > 0) {
-                ParsedTable lastTableOfLastPage = lastPageTables.getLast()
-                        .getTable();
-                ContentTable firstTableBlock = pageTables.getFirst();
-                ParsedTable firstTable = pageTables.getFirst()
-                        .getTable();
-
-                boolean hasOnlyOneRow = firstTable.size() == 1;
-                boolean noHeaderFound = firstTable.getFirst()
-                        .stream()
-                        .filter(headLine -> tableHeaderIndicator.contains(headLine))
-                        .collect(Collectors.toList())
-                        .isEmpty();
-                boolean withMatches = firstTable.maxWith() == lastTableOfLastPage.maxWith();
-
-                if (hasOnlyOneRow || (noHeaderFound && withMatches)) {
-                    mergeFirstLine(lastTableOfLastPage, firstTable);
-                    lastTableOfLastPage.append(firstTable);
-                    removeContent(contentByPage, contentByPage.get(i), firstTableBlock);
+                ParsedTable lastTableOfLastPage = findLastMatchingTable(lastPageTables, tableHeaderIndicator);
+                if (lastTableOfLastPage != null) {
+                    ContentTable continueTableBlock = findPropableContinuingTable(pageTables, tableHeaderIndicator, lastTableOfLastPage.maxWith());
+                    if (continueTableBlock != null) {
+                        ParsedTable continueTable = continueTableBlock.getTable();
+                        mergeFirstLine(lastTableOfLastPage, continueTable);
+                        lastTableOfLastPage.append(continueTable);
+                        removeContent(contentByPage, contentByPage.get(i), continueTableBlock);
+                    }
                 }
             }
         }
+    }
+
+    private ContentTable findPropableContinuingTable(List<ContentTable> pageTables, List<String> tableHeaderIndicator, int withOfLead) {
+        for (ContentTable table : pageTables) {
+            boolean noHeaderFound = !matchesHeaderDetection(tableHeaderIndicator, table.getTable());
+            boolean withMatches = table.getTable()
+                    .maxWith() == withOfLead;
+            if (noHeaderFound && withMatches) {
+                return table;
+            }
+        }
+        for (ContentTable table : pageTables) {
+            boolean hasOnlyOneRow = table.getTable()
+                    .size() == 1;
+            if (hasOnlyOneRow) {
+                return table;
+            }
+        }
+        return null;
+    }
+
+    private ParsedTable findLastMatchingTable(List<ContentTable> lastPageTables, List<String> tableHeaderIndicator) {
+        for (int i = lastPageTables.size() - 1; i >= 0; i--) {
+            if (matchesHeaderDetection(tableHeaderIndicator, lastPageTables.get(i)
+                    .getTable())) {
+                return lastPageTables.get(i)
+                        .getTable();
+            }
+        }
+        return null;
+    }
+
+    public boolean matchesHeaderDetection(List<String> tableHeaderIndicator, ParsedTable firstTable) {
+        return !firstTable.getFirst()
+                .stream()
+                .filter(headLine -> tableHeaderIndicator.contains(headLine))
+                .collect(Collectors.toList())
+                .isEmpty();
     }
 
     private void mergeFirstLine(ParsedTable lastTableOfLastPage, ParsedTable firstTable) {

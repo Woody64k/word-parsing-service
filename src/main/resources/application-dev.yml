@@ -1,3 +1,6 @@
+build:
+  version: 0.8.15
+  time: 2024-01-01
 app:
   security:
     apiKeys: 0815, 12

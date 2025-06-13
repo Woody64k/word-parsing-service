@@ -5,5 +5,5 @@ app:
   security:
     apiKeys: 0815, 12
     throttle:
-      limit: 100
+      limit: 500
       period: 3600000 

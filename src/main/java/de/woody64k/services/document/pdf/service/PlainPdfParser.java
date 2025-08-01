@@ -1,12 +1,12 @@
 package de.woody64k.services.document.pdf.service;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +24,7 @@ import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 public class PlainPdfParser {
 
     public static List<DocumentContent> collectDocumentContent(MultipartFile uploadFile) {
-        try (PDDocument pdf = PDDocument.load(new ByteArrayInputStream(uploadFile.getBytes()))) {
+        try (PDDocument pdf = Loader.loadPDF(uploadFile.getBytes())) {
             PageIterator pi = new ObjectExtractor(pdf).extract();
             List<DocumentContent> contentByPages = new ArrayList<>();
             DocumentContent lastPageContent;

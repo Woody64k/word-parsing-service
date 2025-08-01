@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import de.woody64k.services.document.model.content.DocumentContent;
-import de.woody64k.services.document.model.value.request.DocumentContainerRequirement;
+import de.woody64k.services.document.model.value.request.MailWithDocmentsRequirement;
 import de.woody64k.services.document.model.value.response.DocumentValues;
 import de.woody64k.services.document.msg.service.MsgParser;
 import de.woody64k.services.document.service.DocumentAnalyser;
@@ -44,7 +44,7 @@ public class MailParsingRestController {
     @CrossOrigin
     @PostMapping(value = "/content/values", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @RequestBody(content = @Content(encoding = @Encoding(name = "request", contentType = "application/json")))
-    public DocumentValues parseValues(@RequestParam(required = false) List<String> tableHeaderIndicator, @RequestPart DocumentContainerRequirement request, @RequestPart("file") MultipartFile uploadFile) {
+    public DocumentValues parseValues(@RequestParam(required = false) List<String> tableHeaderIndicator, @RequestPart MailWithDocmentsRequirement request, @RequestPart("file") MultipartFile uploadFile) {
         try {
             DocumentContent parsedData = parseContent(tableHeaderIndicator, uploadFile);
             return analyser.getValuesFromContainer(parsedData, request);

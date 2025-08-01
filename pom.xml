@@ -6,14 +6,15 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.5</version>
+		<version>3.5.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>de.woody64k.services</groupId>
 	<artifactId>word-parsing-service</artifactId>
 	<version>1.5.1</version>
 	<name>word-parsing-service</name>
-	<description>A Rest Service which parses Information out of a PDF or Word Document.</description>
+	<description>A Rest Service which parses Information out of a PDF or Word
+		Document.</description>
 	<properties>
 		<java.version>21</java.version>
 		<springdoc.version>2.5.0</springdoc.version>
@@ -23,7 +24,7 @@
 		<dependency>
 			<groupId>io.github.resilience4j</groupId>
 			<artifactId>resilience4j-ratelimiter</artifactId>
-			<version>2.2.0</version>
+			<version>2.3.0</version>
 		</dependency>
 
 		<dependency>
@@ -35,28 +36,28 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>5.2.5</version>
+			<version>5.4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-scratchpad</artifactId>
-			<version>5.2.5</version>
+			<version>5.4.1</version>
 		</dependency>
 		<!-- Reading Signed Emails  -->
 		<dependency>
 			<groupId>org.simplejavamail</groupId>
 			<artifactId>simple-java-mail</artifactId>
-			<version>8.12.3</version>
+			<version>8.12.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.simplejavamail</groupId>
 			<artifactId>outlook-module</artifactId>
-			<version>8.12.3</version>
+			<version>8.12.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.simplejavamail</groupId>
 			<artifactId>smime-module</artifactId>
-			<version>8.12.3</version>
+			<version>8.12.6</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.mail</groupId>
@@ -68,7 +69,7 @@
 		<dependency>
 			<groupId>technology.tabula</groupId>
 			<artifactId>tabula</artifactId>
-			<version>1.0.4</version>
+			<version>1.0.5</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -78,7 +79,16 @@
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-simple</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.apache.pdfbox</groupId>
+					<artifactId>pdfbox</artifactId>
+				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>3.0.5</version>
 		</dependency>
 
 		<!-- Swagger for Spring -->
@@ -100,7 +110,6 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.9.2</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Documentation -->

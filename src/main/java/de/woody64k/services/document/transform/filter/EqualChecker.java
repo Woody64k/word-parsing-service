@@ -17,7 +17,9 @@ public class EqualChecker implements Predicate<GenericObject> {
             return false;
         } else {
             if (value instanceof String) {
-                return ((String) value).contentEquals(rule.getEquals());
+                return ((String) value).toLowerCase()
+                        .contentEquals(rule.getEquals()
+                                .toLowerCase());
             }
         }
         return false;

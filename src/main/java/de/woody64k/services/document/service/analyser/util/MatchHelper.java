@@ -19,14 +19,14 @@ public class MatchHelper {
             return false;
         } else {
             return requirement.getRegexPattern()
-                    .matcher(text.replaceAll("\s", ""))
+                    .matcher(text)
                     .matches();
         }
     }
 
     public static Matcher findWithRegex(String text, SearchRequirement requirement) {
         Pattern pattern = requirement.getRegexPattern();
-        Matcher matcher = pattern.matcher(text.replaceAll("\s", ""));
+        Matcher matcher = pattern.matcher(text);
         return matcher;
     }
 }

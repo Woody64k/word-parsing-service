@@ -38,18 +38,9 @@ public class HeadingRowAnalyser {
                 matches = scannHeader(row, listRequirement);
                 if (matches.size() != listRequirement.getValues()
                         .size()) {
-                    if (listRequirement.getIgnoreUnknownHeader() == null) {
-                        // FR-06
-                        // Abort if no match
-                        return null;
-                    } else {
-                        if ((matches.size() + listRequirement.getIgnoreUnknownHeader()) < listRequirement.getValues()
-                                .size()) {
-                            // FR-06
-                            // Abort if no match
-                            return null;
-                        }
-                    }
+                    // FR-06
+                    // Abort if no match
+                    return null;
                 }
                 firstRow = false;
                 sizeFirstRow = row.size();

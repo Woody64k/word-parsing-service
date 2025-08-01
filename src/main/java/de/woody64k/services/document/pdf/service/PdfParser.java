@@ -126,30 +126,32 @@ public class PdfParser {
                 .collect(Collectors.toList())
                 .isEmpty();
 
-        if (lessFilled && leadingLinesAreFilled) {
-            for (int nr : filledCellsOfLineToMerge) {
-                leadingLine.appendTo(nr, lineToMerge.get(nr));
-            }
-            firstTable.removeFirst();
-        } else {
-            if (firstTable.size() == 1) {
-                // Special Case for table stubs
-                Map<Integer, DescriptiveStatistics> statics = lastTableOfLastPage.calculateColumnStatistics();
-
-                // Expect the Columns wit the most text in average will be splitted
-                Map<Integer, DescriptiveStatistics> filteredStatistcs = statics.entrySet()
-                        .stream()
-                        .sorted((e1, e2) -> (e2.getValue()
-                                .getGeometricMean()
-                                - e1.getValue()
-                                        .getGeometricMean()) > 0 ? 1 : -1)
-                        .limit(filledCellsOfLineToMerge.size())
-                        .collect(Collectors.toMap(map -> map.getKey(), map -> map.getValue()));
-                for (int i : filteredStatistcs.keySet()) {
-                    Object toMerge = lineToMerge.get(filledCellsOfLineToMerge.removeFirst());
-                    leadingLine.appendTo(i, toMerge);
+        if (lessFilled) {
+            if (leadingLinesAreFilled) {
+                for (int nr : filledCellsOfLineToMerge) {
+                    leadingLine.appendTo(nr, lineToMerge.get(nr));
                 }
                 firstTable.removeFirst();
+            } else {
+                if (firstTable.size() == 1) {
+                    // Special Case for table stubs
+                    Map<Integer, DescriptiveStatistics> statics = lastTableOfLastPage.calculateColumnStatistics();
+
+                    // Expect the Columns with the most text in average will be splitted
+                    Map<Integer, DescriptiveStatistics> filteredStatistcs = statics.entrySet()
+                            .stream()
+                            .sorted((e1, e2) -> (e2.getValue()
+                                    .getGeometricMean()
+                                    - e1.getValue()
+                                            .getGeometricMean()) > 0 ? 1 : -1)
+                            .limit(filledCellsOfLineToMerge.size())
+                            .collect(Collectors.toMap(map -> map.getKey(), map -> map.getValue()));
+                    for (int i : filteredStatistcs.keySet()) {
+                        Object toMerge = lineToMerge.get(filledCellsOfLineToMerge.removeFirst());
+                        leadingLine.appendTo(i, toMerge);
+                    }
+                    firstTable.removeFirst();
+                }
             }
         }
     }

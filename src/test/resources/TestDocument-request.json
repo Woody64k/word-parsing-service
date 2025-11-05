@@ -17,6 +17,15 @@
 			"resultName": "geschmack"
 		},
 		{
+			"searchTerm": "Geruch",
+			"resultName": "geruch",
+			"transform": {
+				"concatFindings": {
+					"separator": "\n"
+				}
+			}
+		},
+		{
 			"searchTerm": "Koch",
 			"resultName": "koch"
 		},

@@ -1,15 +1,32 @@
 package de.woody64k.services.document.transform;
 
+import java.util.Collection;
+
 import org.apache.commons.lang3.StringUtils;
 
 import de.woody64k.services.document.model.value.request.SplitValueRequirement;
+import de.woody64k.services.document.model.value.request.transform.SplitTransform.SplitAs;
 import de.woody64k.services.document.model.value.request.transform.SubStringTransform;
 import de.woody64k.services.document.model.value.request.transform.ValueTransformRequirement;
-import de.woody64k.services.document.model.value.request.transform.SplitTransform.SplitAs;
 import de.woody64k.services.document.model.value.response.GenericObject;
 import de.woody64k.services.document.util.Trimmer;
 
 public class ValueTransformer {
+
+    public static Object concatIfStringList(Object value, ValueTransformRequirement requ) {
+        if (requ != null && requ.getConcatFindings() != null && requ.getConcatFindings()
+                .getSeparator() != null) {
+            if (value instanceof Collection<?>) {
+                Collection<?> list = ((Collection<?>) value);
+                if (!list.isEmpty() && list.toArray()[0] instanceof String) {
+                    return String.join(requ.getConcatFindings()
+                            .getSeparator(), (Collection<String>) list);
+                }
+            }
+        }
+        return value;
+    }
+
     public static Object transform(String value, ValueTransformRequirement requ) {
         if (requ != null) {
             String cuttedValue = doSubstring(value, requ.getSubString());

@@ -20,6 +20,7 @@ import de.woody64k.services.document.service.analyser.DouplepointValueAnalyser;
 import de.woody64k.services.document.service.analyser.FullPlaintextAnalyser;
 import de.woody64k.services.document.service.analyser.HeadingColumnAnalyser;
 import de.woody64k.services.document.service.analyser.HeadingRowAnalyser;
+import de.woody64k.services.document.transform.ValueTransformer;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -43,6 +44,15 @@ public class DocumentAnalyser {
             result.integrate(ChapterAnalyser.analyse(parsedData, condition));
             result.integrate(DefaultValueSetter.setDefaultValue(result, condition));
             result.integrate(FullPlaintextAnalyser.analyse(parsedData, condition));
+
+            // Flatten if multiple values found and flattening is required
+            // (implements FR-15)
+            if (condition.getResultName() != null) {
+                Object transformedContent = ValueTransformer.concatIfStringList(result.get(condition.getResultName()), condition.getTransform());
+                if (transformedContent != null) {
+                    result.put(condition.getResultName(), transformedContent);
+                }
+            }
         }
         return result;
     }

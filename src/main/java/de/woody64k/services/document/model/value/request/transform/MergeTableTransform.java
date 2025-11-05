@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class MergeTransform {
+public class MergeTableTransform {
     // The merge Key
     List<String> by;
     // Single value arrays

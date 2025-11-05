@@ -1,22 +1,28 @@
 package de.woody64k.services.document.model.content;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @JsonPropertyOrder({ "contentCategory", "content" })
 public class DocumentContent implements IContent {
+
     @JsonIgnore
     private static final long serialVersionUID = 1L;
     private String fileName;
-    private ArrayList<IContent> content = new ArrayList<>();
+    private List<IContent> content = new ArrayList<>();
 
     @JsonIgnore
     private String flatString;
@@ -24,6 +30,12 @@ public class DocumentContent implements IContent {
     @Override
     public ContentCategory getContentCategory() {
         return ContentCategory.DOCUMENT;
+    }
+
+    public DocumentContent(String fileName, List<IContent> content) {
+        super();
+        this.fileName = fileName;
+        this.content = content;
     }
 
     public void add(IContent contentBlock) {
@@ -117,5 +129,16 @@ public class DocumentContent implements IContent {
         DocumentContent content = new DocumentContent();
         content.mergeAll(contentByPage);
         return content;
+    }
+
+    public List<IContent> filterFor(ContentCategory... category) {
+        Set<ContentCategory> categorySet = new HashSet<>(Arrays.asList(category));
+        return getContent().stream()
+                .filter(c -> categorySet.contains(c.getContentCategory()))
+                .collect(Collectors.toList());
+    }
+
+    public DocumentContent newDocWith(ContentCategory... category) {
+        return new DocumentContent(fileName, filterFor(category));
     }
 }

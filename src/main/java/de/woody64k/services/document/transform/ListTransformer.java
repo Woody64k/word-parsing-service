@@ -8,14 +8,14 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import de.woody64k.services.document.model.value.request.transform.FilterTransform;
-import de.woody64k.services.document.model.value.request.transform.ListTransformRequirement;
-import de.woody64k.services.document.model.value.request.transform.MergeTransform;
-import de.woody64k.services.document.model.value.request.transform.MergeTransform.MergeObject;
+import de.woody64k.services.document.model.value.request.transform.TableTransformRequirement;
+import de.woody64k.services.document.model.value.request.transform.MergeTableTransform;
+import de.woody64k.services.document.model.value.request.transform.MergeTableTransform.MergeObject;
 import de.woody64k.services.document.model.value.response.GenericObject;
 import de.woody64k.services.document.util.Checker;
 
 public class ListTransformer {
-    public static List<GenericObject> transform(List<GenericObject> values, ListTransformRequirement requ) {
+    public static List<GenericObject> transform(List<GenericObject> values, TableTransformRequirement requ) {
         if (requ != null) {
             List<GenericObject> result = doFilter(values, requ.getFilter());
             result = doMerge(result, requ.getMerge());
@@ -38,7 +38,7 @@ public class ListTransformer {
         }
     }
 
-    private static List<GenericObject> doMerge(List<GenericObject> values, MergeTransform mergeTransform) {
+    private static List<GenericObject> doMerge(List<GenericObject> values, MergeTableTransform mergeTransform) {
         List<GenericObject> mergedData = new ArrayList<>();
         if (values != null && mergeTransform != null) {
             List<String> mergeKey = mergeTransform.getBy();
@@ -69,7 +69,7 @@ public class ListTransformer {
 
     }
 
-    private static void orderMerge(List<GenericObject> mergedData, MergeTransform mergeTransform) {
+    private static void orderMerge(List<GenericObject> mergedData, MergeTableTransform mergeTransform) {
         if (mergeTransform.getObjects() != null) {
             for (MergeObject subList : mergeTransform.getObjects()) {
                 if (Checker.isNotEmpty(subList.getOrderBy())) {

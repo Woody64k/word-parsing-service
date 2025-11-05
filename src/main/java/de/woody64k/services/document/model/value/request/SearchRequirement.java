@@ -42,7 +42,7 @@ public class SearchRequirement extends ValueRequirements {
 
     public Pattern buildRegex(String value) {
         if (useRegex) {
-            return Pattern.compile(value.replaceAll("\s+", "\\s+"), Pattern.CASE_INSENSITIVE);
+            return Pattern.compile(value, Pattern.CASE_INSENSITIVE);
         } else {
             List<String> parts = Arrays.asList(value.split("\s+"));
             String regex = parts.stream()

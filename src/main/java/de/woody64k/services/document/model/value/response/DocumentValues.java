@@ -5,23 +5,22 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class DocumentValues {
-    GenericObject data = new GenericObject();
+public class DocumentValues extends GenericObject {
 
     public void addValue(String key, String value) {
-        data.put(key, value);
+        put(key, value);
     }
 
     public void integrate(DocumentValues values) {
-        data.putAll(values.getData());
+        putAll(values);
     }
 
     public void integrate(GenericObject values) {
-        data.putAll(values);
+        putAll(values);
     }
 
     public void addValues(String key, List<GenericObject> values) {
-        data.put(key, values);
+        put(key, values);
     }
 
     /**
@@ -30,8 +29,9 @@ public class DocumentValues {
      * @param key
      * @return
      */
+    @Override
     public GenericObject getList(String key) {
-        return data.getList(key);
+        return getList(key);
     }
 
 }

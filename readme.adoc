@@ -87,6 +87,10 @@ When running in docker while connected to vpn, *localhost* may not work. (theref
 | BR-10 [[BR-10]] 
 | An analyse PDF
 | Analog to Word documents, a Parsing of PDF documents should also be possible, because sometimes, our customers submit them in pdf.
+
+| BR-11 [[BR-11]]
+| Handling if multiple matches
+| We need to be able to identify when the Analyse finds more than one result. But we need the option to have a fixed type.
 |===
 
 === Constraints
@@ -252,4 +256,22 @@ If possible leave the cells as string if they just contain text.
 * We pass expected headings to the service. Tables without them will be merges with the last one before
 * We check if the number of columns math between the table without the headings and the table before (prepare by get rid of empty columns <<FR-13, FR-13>>)
 
+| FR-15 [[FR-15]]
+| * <<BR-11, BR-11>>
+| Handle multiple matches as Array or concatenated String
+| The default behavior should be to handle multiple matches while analysing the document as Array (to know there are different matches).
+It will be configurable how the concatenation should be done.
+
+[source,json]
+----
+{
+  "searchTerm": "Maße",
+  "resultName": "meassure",
+  "transform": {
+    "concatFindings": {
+      "separator": ","
+    }
+  }
+}
+----
 |===

@@ -110,6 +110,11 @@
 					"resultName": "gewicht"
 				},
 				{
+					"searchTerm": "gibt-es-nicht",
+					"resultName": "na",
+					"optional": true
+				},
+				{
 					"searchTerm": "Maße",
 					"resultName": "measures",
 					"transform": {

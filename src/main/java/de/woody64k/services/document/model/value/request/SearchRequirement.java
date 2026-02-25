@@ -22,6 +22,7 @@ public class SearchRequirement extends ValueRequirements {
     private String readAllTill;
     private String resultName;
     private String defaultValue;
+    private boolean optional;
     private ValueTransformRequirement transform;
 
     @JsonIgnore

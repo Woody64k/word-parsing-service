@@ -91,6 +91,10 @@ When running in docker while connected to vpn, *localhost* may not work. (theref
 | BR-11 [[BR-11]]
 | Handling if multiple matches
 | We need to be able to identify when the Analyse finds more than one result. But we need the option to have a fixed type.
+
+| BR-12 [[BR-12]]
+| Handling of Different table Headers
+| We need to be able to handle Differences in the table structure (sometimes columns are not present).
 |===
 
 === Constraints
@@ -273,5 +277,19 @@ It will be configurable how the concatenation should be done.
     }
   }
 }
+----
+
+| FR-16 [[FR-16]]
+| * <<BR-12, BR-12>>
+| Add optional label to column Mappings
+| Add a new flag if a searchTerm is Optional. In this case the table will be detected with and without this term.
+
+[source,json]
+----
+	{
+		"searchTerm": "Anzahl",
+		"resultName": "anzahl",
+        "optional": true
+	},
 ----
 |===

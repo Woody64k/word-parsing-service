@@ -36,8 +36,7 @@ public class HeadingRowAnalyser {
         for (ParsedTableRow row : table.getTable()) {
             if (firstRow) {
                 matches = scannHeader(row, listRequirement);
-                if (matches.size() != listRequirement.getValues()
-                        .size()) {
+                if (!ceckIfHeaderMatches(matches, listRequirement)) {
                     // FR-06
                     // Abort if no match
                     return null;
@@ -53,12 +52,31 @@ public class HeadingRowAnalyser {
         return result;
     }
 
+    /**
+     * Check if all non-Optional headers are present. (FR-16)
+     * 
+     * @param matches
+     * @param listRequirement
+     * @return
+     */
+    private static boolean ceckIfHeaderMatches(Map<String, Integer> matches, ListRequirement listRequirement) {
+        List<SearchRequirement> values = listRequirement.getValues();
+        for (SearchRequirement value : values) {
+            if (!value.isOptional()) { // FR-16
+                if (!matches.containsKey(value.getSearchTerm())) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public static GenericObject readLine(Map<String, Integer> matches, ParsedTableRow row, ListRequirement listRequirement) {
         GenericObject oneRow = new GenericObject();
         // read Values
         for (SearchRequirement valueRequ : listRequirement.getValues()) {
-            if (matches.containsKey(valueRequ.getResultName())) {
-                Integer matchColumn = matches.get(valueRequ.getResultName());
+            if (matches.containsKey(valueRequ.getSearchTerm())) {
+                Integer matchColumn = matches.get(valueRequ.getSearchTerm());
                 String text = (String) row.get(matchColumn);
                 oneRow.putAndFlatten(valueRequ.getResultName(), ValueTransformer.transform(text, valueRequ.getTransform()), false);
             }
@@ -80,7 +98,7 @@ public class HeadingRowAnalyser {
         for (SearchRequirement requirement : listRequirement.getValues()) {
             int pos = findInRow(row, tableMap, requirement);
             if (pos >= 0) {
-                tableMap.put(requirement.getResultName(), pos);
+                tableMap.put(requirement.getSearchTerm(), pos);
             }
         }
         return tableMap;

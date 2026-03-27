@@ -6,25 +6,25 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.4</version>
+		<version>4.0.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>de.woody64k.services</groupId>
 	<artifactId>word-parsing-service</artifactId>
-	<version>1.6.1-SNAPSHOT</version>
+	<version>1.6.2</version>
 	<name>word-parsing-service</name>
 	<description>A Rest Service which parses Information out of a PDF or Word
 		Document.</description>
 	<properties>
 		<java.version>21</java.version>
-		<springdoc.version>2.5.0</springdoc.version>
+		<springdoc.version>3.0.2</springdoc.version>
 	</properties>
 	<dependencies>
 		<!-- for throtteling -->
 		<dependency>
 			<groupId>io.github.resilience4j</groupId>
 			<artifactId>resilience4j-ratelimiter</artifactId>
-			<version>2.3.0</version>
+			<version>2.4.0</version>
 		</dependency>
 
 		<dependency>
@@ -36,12 +36,12 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>5.4.1</version>
+			<version>5.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-scratchpad</artifactId>
-			<version>5.4.1</version>
+			<version>5.5.1</version>
 		</dependency>
 		<!-- Reading Signed Emails  -->
 		<dependency>
@@ -84,12 +84,12 @@
 		<dependency>
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
-			<version>3.0.5</version>
+			<version>3.0.7</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-cli</groupId>
 			<artifactId>commons-cli</artifactId>
-			<version>1.9.0</version>
+			<version>1.11.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.jts</groupId>

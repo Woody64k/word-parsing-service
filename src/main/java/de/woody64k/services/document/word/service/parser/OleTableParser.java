@@ -53,7 +53,9 @@ public class OleTableParser {
     private static Collection<? extends ContentTable> parseOLEObject(XWPFDocument document, String rId) {
         POIXMLDocumentPart documentPart = document.getRelationById(rId);
         if ("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet".equals(documentPart.getPackagePart()
-                .getContentType())) {
+                .getContentType()) || "application/vnd.openxmlformats-officedocument.oleObject".equals(
+                        documentPart.getPackagePart()
+                                .getContentType())) {
             return parseXSSFWorkbook(documentPart.getPackagePart());
         } else if ("application/vnd.ms-excel".equals(documentPart.getPackagePart()
                 .getContentType())) {
